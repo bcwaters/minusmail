@@ -83,7 +83,7 @@ export class RedisService implements OnModuleInit {
       // Set TTL for the set (refresh if it already exists)
       await this.redisClient.expire(emailKey, this.TTL_SECONDS);
 
-      this.logger.log(`Email stored with ID: ${emailId} for username: ${username}`);
+      this.logger.log(`[REDIS] Email stored: ${emailId} for ${username}`);
       return emailId;
     } catch (error) {
       this.logger.error(`Failed to store email for username ${username}:`, error);
@@ -157,6 +157,7 @@ export class RedisService implements OnModuleInit {
         }
       }
 
+      this.logger.log(`[REDIS] Retrieved ${emails.length} emails for ${username}`);
       return emails;
     } catch (error) {
       this.logger.error(`Failed to get emails for username ${username}:`, error);
@@ -314,5 +315,18 @@ export class RedisService implements OnModuleInit {
       throw new Error('Redis not connected');
     }
     await this.redisClient.lRem(emailId, 1, JSON.stringify(emailData));
+  }
+
+  /**
+   * Create a Redis subscriber client for listening to notifications
+   * @returns Redis subscriber client
+   */
+  createSubscriber() {
+    return createClient({
+      socket: {
+        host: 'localhost',
+        port: 6379,
+      },
+    });
   }
 }

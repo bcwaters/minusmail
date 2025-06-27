@@ -241,48 +241,74 @@ export class ApiGatewayController {
     return { message: 'Test event emitted', data: testData };
   }
 
-  /**
-   * Trigger email for testing (updated to use new storage pattern)
-   */
-  @Get(':username/trigger')
-  async triggerEmail(@Param('username') username: string) {
-    console.log('triggerEmail triggered for username:', username);
-
+  @Get('test/websocket')
+  async testWebSocket() {
     try {
-      // Create test email data
-      const emailData: EmailData = {
-        from: 'sender@example.com',
-        subject: 'Test Email for ' + username,
-        htmlBody: '<p>This is a <b>test email</b> for username: ' + username + '</p>',
-        textBody: 'This is a test email for username: ' + username,
-        received: new Date().toISOString(),
-      };
-
-      console.log('Created test email:', emailData);
-
-      // Store the email using the new pattern
-      const emailId = await this.redisService.storeEmail(username, emailData);
-      console.log('Stored email with ID:', emailId);
-
-      // Emit to connected clients using the gateway
-      console.log('About to emit to room:', username);
-      console.log('Event name: new-email');
-      console.log('Event data:', { emailId, ...emailData });
+      const server = this.emailGateway.server;
+      const connectedClients = server.sockets.sockets.size;
+      const engineClients = server.engine.clientsCount;
       
-      this.emailGateway.server.to(username).emit('new-email', {
-        emailId,
-        ...emailData
-      });
-      console.log('Emitted email to room:', username);
-
-      return { 
-        message: 'Email processed and stored successfully', 
-        username, 
-        emailId,
-        email: emailData 
+      return {
+        status: 'ok',
+        message: 'WebSocket gateway is running',
+        connectedClients,
+        engineClients,
+        timestamp: new Date().toISOString()
       };
     } catch (error) {
-      console.error('Error in triggerEmail:', error);
+      return {
+        status: 'error',
+        message: 'WebSocket gateway error',
+        error: error.message,
+        timestamp: new Date().toISOString()
+      };
+    }
+  }
+
+  /**
+   * Process emails for a username (get most recent email)
+   */
+  @Get(':username/process')
+  async processEmailsForUsername(@Param('username') username: string) {
+    console.log('processEmailsForUsername triggered for username:', username);
+
+    try {
+      // Get all emails for this username
+      const emails = await this.redisService.getEmailsForUsername(username);
+      console.log(`Found ${emails.length} emails for username: ${username}`);
+
+      if (emails.length > 0) {
+        // Get the most recent email
+        const mostRecentEmail = emails.sort((a, b) => 
+          new Date(b.received).getTime() - new Date(a.received).getTime()
+        )[0];
+
+        console.log('Most recent email:', mostRecentEmail);
+
+        // Emit to connected clients using the gateway
+        console.log('About to emit to room:', username);
+        console.log('Event name: new-email');
+        console.log('Event data:', mostRecentEmail);
+        
+        this.emailGateway.server.to(username).emit('new-email', mostRecentEmail);
+        console.log('Emitted email to room:', username);
+
+        return { 
+          message: 'Email processed successfully', 
+          username, 
+          email: mostRecentEmail,
+          totalEmails: emails.length
+        };
+      } else {
+        console.log('No emails found for username:', username);
+        return { 
+          message: 'No emails found for this username', 
+          username, 
+          totalEmails: 0
+        };
+      }
+    } catch (error) {
+      console.error('Error in processEmailsForUsername:', error);
       return { 
         message: 'Email processing failed', 
         username, 

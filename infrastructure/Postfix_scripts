@@ -1,0 +1,103 @@
+# MinusMail Postfix Integration
+
+## Email Processing Flow
+
+1. **Postfix receives email** → `EmailProcessorScript.js` processes it
+2. **Email stored in Redis** → Backend service reads from Redis
+3. **Redis pub/sub notification** → Backend service notified of new email
+4. **WebSocket notification** → Frontend receives real-time updates
+
+## Real-Time Email Updates
+
+The system now supports real-time email updates:
+
+- **Redis Pub/Sub**: When `EmailProcessorScript.js` stores a new email, it publishes a notification
+- **Backend Subscription**: The `EmailGateway` subscribes to Redis notifications
+- **WebSocket Emission**: New emails are automatically sent to connected clients
+- **Frontend Updates**: The webapp receives emails instantly without polling
+
+## Postfix Configuration
+
+Add minusmail.com to Virtual Domains:
+
+    Edit /etc/postfix/main.cf to include minusmail.com as a virtual alias domain:
+    text
+
+virtual_alias_domains = minusmail.com
+virtual_alias_maps = hash:/etc/postfix/virtual
+Ensure no conflicting settings (e.g., mydestination should not include minusmail.com).
+
+## Email Processing Script
+
+The `EmailProcessorScript.js` processes incoming emails from Postfix and stores them in Redis:
+
+```bash
+# Make the script executable
+chmod +x infrastructure/EmailProcessorScript.js
+
+# Test the script with a sample email
+echo "From: sender@example.com
+To: test@minusmail.com
+Subject: Test Email
+
+This is a test email body." | node infrastructure/EmailProcessorScript.js
+```
+
+## Backend Service Integration
+
+The backend service has been refactored to:
+
+1. **Read emails from Redis** instead of generating test emails
+2. **Process real emails** from the EmailProcessorScript
+3. **Subscribe to Redis notifications** for real-time updates
+4. **Provide real-time updates** via WebSocket
+
+### Key Changes:
+- ✅ Removed test email generation
+- ✅ Integrated with Redis email storage
+- ✅ Added Redis pub/sub for real-time notifications
+- ✅ Added proper email processing methods
+- ✅ Updated API endpoints for real email handling
+
+## Testing Email Flow
+
+To test the complete email flow:
+
+1. **Send email via Postfix:**
+   ```bash
+   echo "Subject: Test Email\n\nThis is a test email body." | sendmail -f sender@minusmail.com test@minusmail.com
+   ```
+
+2. **Check Redis storage:**
+   ```bash
+   redis-cli SMEMBERS emails:test
+   ```
+
+3. **Verify backend processing:**
+   ```bash
+   curl http://localhost:3000/email/username/test
+   ```
+
+4. **Test real-time updates:**
+   - Open the webapp and join room "test"
+   - Send an email to test@minusmail.com
+   - Email should appear instantly in the webapp
+
+## Redis Data Structure
+
+Emails are stored in Redis using this pattern:
+- **Email data**: `{uuid}` → JSON email object (TTL: 15 minutes)
+- **Email list**: `emails:{username}` → Set of email UUIDs (TTL: 15 minutes)
+- **Notifications**: `new-email` channel → Pub/sub notifications for real-time updates
+
+Example:
+```
+emails:test → Set containing UUIDs of emails for user "test"
+{uuid1} → {"from": "...", "subject": "...", "htmlBody": "...", "textBody": "...", "received": "..."}
+{uuid2} → {"from": "...", "subject": "...", "htmlBody": "...", "textBody": "...", "received": "..."}
+new-email → Channel for real-time notifications
+```
+
+send email: echo "Subject: Test Email\n\nThis is a test email body." | sendmail -f sender@minusmail.com test@minusmail.com
+
+echo -e "From: sender@minusmail.com\nTo: test@minusmail.com\nSubject: Test Email\n\nAnother email." | sendmail test@minusmail.com

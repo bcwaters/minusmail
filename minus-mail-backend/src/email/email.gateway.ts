@@ -1,7 +1,9 @@
 import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
+import { OnModuleInit } from '@nestjs/common';
 import { EmailProcessorService } from '../email-processor/email-processor.service';
+import { RedisService } from '../redis/redis.service';
 
 @WebSocketGateway({ 
   cors: { 
@@ -11,52 +13,98 @@ import { EmailProcessorService } from '../email-processor/email-processor.servic
   },
   transports: ['polling', 'websocket']
 })
-export class EmailGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class EmailGateway implements OnGatewayConnection, OnGatewayDisconnect, OnModuleInit {
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly emailProcessorService: EmailProcessorService) {}
+  private redisSubscriber: any;
+
+  constructor(
+    private readonly emailProcessorService: EmailProcessorService,
+    private readonly redisService: RedisService
+  ) {}
+
+  async onModuleInit() {
+    console.log('=== EMAIL GATEWAY: Initializing ===');
+    // Set up Redis subscription to listen for new emails (non-blocking)
+    this.setupRedisSubscription().catch(error => {
+      console.error('Failed to setup Redis subscription, but continuing:', error);
+    });
+  }
+
+  private async setupRedisSubscription() {
+    try {
+      console.log('[GATEWAY] Setting up Redis subscription');
+      // Create a Redis subscriber client
+      this.redisSubscriber = this.redisService.createSubscriber();
+      
+      // Connect the subscriber
+      await this.redisSubscriber.connect();
+      console.log('[GATEWAY] Redis subscriber connected');
+      
+      // Subscribe to a channel for new email notifications
+      await this.redisSubscriber.subscribe('new-email', (message: string) => {
+        try {
+          const data = JSON.parse(message);
+          console.log('[GATEWAY] Redis notification received for:', data.username);
+          
+          // Emit the new email to all clients in the username room
+          this.server.to(data.username).emit('new-email', data.email);
+          console.log(`[GATEWAY] Emitted email to room: ${data.username}`);
+        } catch (error) {
+          console.error('[GATEWAY] Error processing Redis notification:', error);
+        }
+      });
+
+      console.log('[GATEWAY] Redis subscription ready');
+    } catch (error) {
+      console.error('[GATEWAY] Redis subscription failed:', error);
+    }
+  }
 
   handleConnection(client: Socket) {
     console.log('=== CLIENT CONNECTED ===');
     console.log('Client ID:', client.id);
     console.log('Client transport:', client.conn.transport.name);
     console.log('Total connected clients:', this.server.sockets.sockets.size);
+    console.log('Server ready state:', this.server.engine.clientsCount);
   }
 
   handleDisconnect(client: Socket) {
     console.log('=== CLIENT DISCONNECTED ===');
     console.log('Client ID:', client.id);
     console.log('Total connected clients:', this.server.sockets.sockets.size);
+    console.log('Server ready state:', this.server.engine.clientsCount);
   }
 
   @SubscribeMessage('join')
   async handleJoin(client: Socket, emailId: string) {
-    console.log('=== JOIN REQUEST RECEIVED ===');
-    console.log('Client ID:', client.id);
-    console.log('Email ID:', emailId);
-    console.log('Client transport:', client.conn.transport.name);
+    console.log('[GATEWAY] Join request:', client.id, '->', emailId);
 
     client.join(emailId);
-    console.log('Client joined room:', emailId);
-    
-    // Log room membership
-    const room = this.server.sockets.adapter.rooms.get(emailId);
-    console.log('Clients in room', emailId, ':', room ? room.size : 0);
-    console.log('All rooms:', Array.from(this.server.sockets.adapter.rooms.keys()));
+    console.log('[GATEWAY] Client joined room:', emailId);
     
     try {
-      // Use the integrated email processor service
-      const email = await this.emailProcessorService.processEmail({ emailId, useStub: true });
-      console.log('Email received from service:', email);
-      console.log('Email type:', typeof email);
-      console.log('Email keys:', Object.keys(email || {}));
+      // Process any existing emails for this emailId
+      const email = await this.emailProcessorService.processEmail({ emailId });
       
-      console.log('Emitting new-email to room:', emailId);
-      this.server.to(emailId).emit('new-email', email);
-      console.log('Emission completed');
+      if (email) {
+        console.log('[GATEWAY] Emitting existing email to:', emailId);
+        this.server.to(emailId).emit('new-email', email);
+      } else {
+        console.log('[GATEWAY] No emails found, sending welcome to:', emailId);
+        // Send welcome message for new email addresses
+        const welcomeEmail = {
+          from: 'system@minusmail.com',
+          subject: 'Welcome to MinusMail',
+          htmlBody: '<p>Welcome to your temporary email inbox! Any emails sent to <b>' + emailId + '@minusmail.com</b> will appear here.</p>',
+          textBody: 'Welcome to your temporary email inbox! Any emails sent to ' + emailId + '@minusmail.com will appear here.',
+          received: new Date().toISOString(),
+        };
+        this.server.to(emailId).emit('new-email', welcomeEmail);
+      }
     } catch (error) {
-      console.error('Error processing email:', error);
+      console.error('[GATEWAY] Error in join handler:', error);
       // Send a fallback email if service fails
       const fallbackEmail = {
         from: 'system@minusmail.com',
@@ -71,26 +119,35 @@ export class EmailGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('trigger-email')
   async handleTriggerEmail(client: Socket, emailId: string) {
-    console.log('Manual trigger requested for:', emailId);
+    console.log('Manual email trigger requested for:', emailId);
     
-    const testEmail = {
-      from: 'test@example.com',
-      subject: 'Manual Trigger Test',
-      htmlBody: '<p>This is a <b>manual trigger test</b> email!</p>',
-      textBody: 'This is a manual trigger test email!',
-      received: new Date().toISOString(),
-    };
-    
-    console.log('Emitting manual test email to room:', emailId);
-    this.server.to(emailId).emit('new-email', testEmail);
-    console.log('Manual emission completed');
-    
-    return testEmail;
+    try {
+      // Process emails for the given emailId
+      const email = await this.emailProcessorService.processEmail({ emailId });
+      
+      if (email) {
+        console.log('Email found and emitted to room:', emailId);
+        this.server.to(emailId).emit('new-email', email);
+        return email;
+      } else {
+        console.log('No emails found for:', emailId);
+        return { message: 'No emails found for this address' };
+      }
+    } catch (error) {
+      console.error('Error processing email:', error);
+      return { error: 'Failed to process email' };
+    }
   }
 
   @SubscribeMessage('test')
   async handleTest(client: Socket, message: string) {
     console.log('Test message received from client:', client.id, message);
     return { message: 'Test response from server' };
+  }
+
+  @SubscribeMessage('ping')
+  async handlePing(client: Socket) {
+    console.log('Ping received from client:', client.id);
+    return { message: 'pong', timestamp: new Date().toISOString() };
   }
 }

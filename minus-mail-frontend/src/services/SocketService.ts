@@ -48,6 +48,7 @@ class SocketService {
     })
 
     this.socket.on('new-email', (emailData: EmailData) => {
+      console.log('[SOCKET] New email event received:', emailData);
       this.callbacks.onNewEmail?.(emailData)
     })
   }

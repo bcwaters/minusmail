@@ -23,9 +23,15 @@ function App() {
       onDisconnect: () => setIsConnected(false),
       onConnectError: () => setIsConnected(false),
       onNewEmail: (emailData: EmailData) => {
+        console.log('[FRONTEND] New email received:', emailData);
         setEmailData(emailData);
         // Add new email to the list
-        setEmailList(prev => [emailData, ...prev]);
+        setEmailList(prev => {
+          console.log('[FRONTEND] Updating email list, current count:', prev.length);
+          const newList = [emailData, ...prev];
+          console.log('[FRONTEND] New email list count:', newList.length);
+          return newList;
+        });
       }
     })
 

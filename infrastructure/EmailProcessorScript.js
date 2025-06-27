@@ -76,6 +76,16 @@ process.stdin.on('end', async () => {
     await client.expire(emailKey, TTL_SECONDS);
     log(`TTL set for email set: ${emailKey}`);
     
+    // Publish notification to backend service
+    const notification = {
+      username: username,
+      emailId: emailId,
+      email: email
+    };
+    
+    await client.publish('new-email', JSON.stringify(notification));
+    log(`Published notification to 'new-email' channel for username: ${username}`);
+    
     log(`SUCCESS: Email stored with ID: ${emailId} for username: ${username}`);
     await client.quit();
     process.exit(0);

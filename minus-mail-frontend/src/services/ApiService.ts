@@ -63,16 +63,6 @@ class ApiService {
       return null;
     }
   }
-
-  async triggerTestEmail(username: string): Promise<boolean> {
-    try {
-      await axios.get(`${API_BASE_URL}/${username}/trigger`);
-      return true;
-    } catch (error) {
-      console.error('Error triggering test email:', error);
-      return false;
-    }
-  }
 }
 
 // Export a singleton instance

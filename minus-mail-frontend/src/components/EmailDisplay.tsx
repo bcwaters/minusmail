@@ -3,10 +3,14 @@ import DOMPurify from 'dompurify';
 import root from 'react-shadow';
 
 function EmailDisplay({ email }) {
+  console.log('EmailDisplay', email);
   const htmlContent = email.htmlBody || '<p>No HTML content</p>';
+  const textContent = email.textBody || 'No text content';
 
   // Sanitize HTML
   const sanitizedHtml = DOMPurify.sanitize(htmlContent);
+  //append text content to the html content
+  const htmlWithText = sanitizedHtml + '<p> text content: <br/>' + textContent + '</p>';
 
   return (
     <root.div>
@@ -25,7 +29,7 @@ function EmailDisplay({ email }) {
       `}</style>
       <div
         className="email-content"
-        dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
+        dangerouslySetInnerHTML={{ __html: htmlWithText }}
       />
     </root.div>
   );
