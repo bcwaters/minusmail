@@ -1,0 +1,11 @@
+npm install -g @nest/cli
+nest new MinusMailBackend
+sudo npm install @nestjs/microservices @nestjs/websockets @nestjs/platform-socket.io @nestjs/throttler
+npm install @nestjs/cache-manager cache-manager cache-manager-redis-store redis
+
+npm install ioredis
+
+
+sudo apt install redis-server
+sudo systemctl start redis
+sudo systemctl enable 

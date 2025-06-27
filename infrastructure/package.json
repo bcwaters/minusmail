@@ -1,0 +1,16 @@
+{
+  "name": "minusmail-infrastructure",
+  "version": "1.0.0",
+  "description": "Infrastructure scripts for MinusMail",
+  "main": "EmailProcessorScript.js",
+  "scripts": {
+    "install-deps": "npm install"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mailparser": "^3.6.5",
+    "redis": "^5.5.6",
+    "uuid": "^11.1.0"
+  }
+}
