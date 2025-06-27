@@ -18,6 +18,8 @@ The system now supports real-time email updates:
 
 ## Postfix Configuration
 
+refer to virtual, main.cf, transport, and master.cf
+
 Add minusmail.com to Virtual Domains:
 
     Edit /etc/postfix/main.cf to include minusmail.com as a virtual alias domain:

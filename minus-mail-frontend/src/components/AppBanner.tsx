@@ -1,4 +1,3 @@
-import React from 'react';
 import root from 'react-shadow';
 
 function AppBanner() {

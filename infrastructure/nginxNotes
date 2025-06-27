@@ -1,0 +1,26 @@
+server {
+    listen 80;
+    server_name minusmail.com;
+
+    # Serve React static files
+    root /path/to/email-frontend/dist;
+    index index.html;
+    try_files $uri $uri/ /index.html;
+
+    # Proxy WebSocket to NestJS
+    location /socket.io/ {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+    }
+
+    # Proxy API to NestJS API Gateway
+    location /email/ {
+        proxy_pass http://localhost:3000; # Or 3001 if separate
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+
+Initial config state

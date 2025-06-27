@@ -1,11 +1,15 @@
-import React from 'react';
 import DOMPurify from 'dompurify';
 import root from 'react-shadow';
+import type { EmailData } from '../services/ApiService'
 
-function EmailDisplay({ email }) {
+interface EmailDisplayProps {
+  email: EmailData | null;
+}
+
+function EmailDisplay({ email }: EmailDisplayProps) {
   console.log('EmailDisplay', email);
-  const htmlContent = email.htmlBody || '<p>No HTML content</p>';
-  const textContent = email.textBody || 'No text content';
+  const htmlContent = email?.htmlBody || '<p>No HTML content</p>';
+  const textContent = email?.textBody || 'No text content';
 
   // Sanitize HTML
   const sanitizedHtml = DOMPurify.sanitize(htmlContent);

@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
-import { v4 as uuidv4 } from 'uuid'
 import EmailDisplay from './components/EmailDisplay'
 import './App.css'
 import EmailSidebar from './components/EmailSidebar'
@@ -13,7 +11,6 @@ function App() {
   const [emailData, setEmailData] = useState<EmailData | null>(null)
   const [emailList, setEmailList] = useState<EmailData[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState(null)
   const [isConnected, setIsConnected] = useState(false)
   
   useEffect(() => {
@@ -124,7 +121,7 @@ function App() {
           </div>
         </div>
         <div className="email-display">
-          <EmailDisplay email={emailData || {htmlBody: '<p>No email selected</p>'}} />
+          <EmailDisplay email={emailData} />
         </div>
       </div>
     </div>
