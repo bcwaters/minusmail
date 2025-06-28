@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { config } from '../config/environment';
 
-const API_BASE_URL = 'http://localhost:3000/email';
+const API_BASE_URL = `${config.apiBaseUrl}/email`;
 
 export interface EmailData {
   from: string;

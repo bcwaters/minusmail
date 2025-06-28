@@ -1,5 +1,6 @@
 import io, { Socket } from 'socket.io-client'
 import type { EmailData } from './ApiService'
+import { config } from '../config/environment'
 
 export interface SocketCallbacks {
   onConnect?: () => void
@@ -20,7 +21,7 @@ class SocketService {
     this.currentEmailAddress = emailAddress
     this.callbacks = callbacks
 
-    this.socket = io('http://localhost:3000', {
+    this.socket = io(config.wsBaseUrl, {
       transports: ['polling', 'websocket'],
       upgrade: true,
       rememberUpgrade: true,
