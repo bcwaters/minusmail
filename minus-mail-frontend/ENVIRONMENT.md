@@ -12,9 +12,13 @@ This frontend application uses environment variables to configure the backend AP
 VITE_API_BASE_URL=http://localhost:3000
 VITE_WS_BASE_URL=http://localhost:3000
 
-# Production example (update with your actual domain)
-# VITE_API_BASE_URL=https://api.yourdomain.com
-# VITE_WS_BASE_URL=https://api.yourdomain.com
+# Production - Use your domain (nginx will proxy to localhost:3000)
+VITE_API_BASE_URL=https://minusmail.com
+VITE_WS_BASE_URL=https://minusmail.com
+
+# Alternative: Use API subdomain if you prefer
+# VITE_API_BASE_URL=https://api.minusmail.com
+# VITE_WS_BASE_URL=https://api.minusmail.com
 ```
 
 ## Environment Variables
@@ -25,23 +29,33 @@ VITE_WS_BASE_URL=http://localhost:3000
 ## Usage
 
 - **Development**: Uses `http://localhost:3000` by default if no environment variables are set
-- **Production**: Set the environment variables to your production backend URLs
+- **Production**: Set the environment variables to your production domain (nginx will proxy to localhost:3000)
 - **Build**: Environment variables are embedded at build time, so make sure to set them before building
+
+## Production Architecture
+
+```
+Internet → Cloudflare → Nginx (minusmail.com) → Backend (localhost:3000)
+```
+
+- **Frontend**: Served by nginx from `/path/to/email-frontend/dist`
+- **API calls**: `https://minusmail.com/email/*` → proxied to `http://localhost:3000/email/*`
+- **WebSocket**: `https://minusmail.com/socket.io/*` → proxied to `http://localhost:3000/socket.io/*`
 
 ## Example Production Setup
 
-For a production environment where your backend is at `https://api.minusmail.com`:
+For a production environment where your domain is `minusmail.com`:
 
 ```bash
-VITE_API_BASE_URL=https://api.minusmail.com
-VITE_WS_BASE_URL=https://api.minusmail.com
+VITE_API_BASE_URL=https://minusmail.com
+VITE_WS_BASE_URL=https://minusmail.com
 ```
 
 ## Building for Production
 
 ```bash
 # Set environment variables and build
-VITE_API_BASE_URL=https://api.yourdomain.com VITE_WS_BASE_URL=https://api.yourdomain.com npm run build
+VITE_API_BASE_URL=https://minusmail.com VITE_WS_BASE_URL=https://minusmail.com npm run build
 ```
 
 Or create a `.env.production` file with your production values and run:
@@ -54,4 +68,5 @@ npm run build
 
 - Environment variables must be prefixed with `VITE_` to be accessible in the frontend code
 - The `.env` file should not be committed to version control (it's already in `.gitignore`)
-- For different environments, you can create `.env.development`, `.env.production`, etc. 
+- For different environments, you can create `.env.development`, `.env.production`, etc.
+- **Important**: In production, the frontend connects to your domain, not localhost. Nginx handles the proxy to your backend. 

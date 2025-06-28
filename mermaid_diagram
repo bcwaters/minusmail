@@ -1,0 +1,26 @@
+
+sequenceDiagram
+    participant EMAIL as Email
+    participant User
+    participant WebClient as React Web Client
+    participant NGINX
+    participant NestJS as NestJS (API Gateway & WebSocket)
+    participant Script as EmailProcessorScript.js
+    participant Postfix
+    participant Redis as Redis Microservice
+
+    EMAIL->>Postfix: Send email to test@minusmail.com
+    Postfix->>Script: Pipe email (STDIN, $local_part)
+    Script->>Redis: Store email (SETEX <uuid>, SADD emails:<username>)
+    Redis-->>NestJS: Notify new email (PUBLISH email-channel)
+    NestJS-->>WebClient: Emit new email via WebSocket
+
+    User->>NGINX: Access Web Client
+    NGINX->>WebClient: Serve static files
+    WebClient->>NGINX: WebSocket (/socket.io)
+    NGINX->>NestJS: Proxy WebSocket
+    WebClient->>NGINX: REST (/email)
+    NGINX->>NestJS: Proxy API
+    NestJS->>Redis: Fetch emails (SMEMBERS, GET)
+    Redis-->>NestJS: Return emails
+    NestJS-->>WebClient: Emit emails via WebSocket
