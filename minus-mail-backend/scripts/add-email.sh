@@ -4,16 +4,16 @@
 # Usage: ./add-email.sh <username> [from] [subject] [message]
 
 # Default values
-USERNAME=${1:-"minus"}
-FROM=${2:-"sender@minusmail.com"}
-SUBJECT=${3:-"Test Email for $USERNAME"}
-MESSAGE=${4:-"This is a test email for user: $USERNAME"}
+USERNAME=${1:-"test"}
+FROM=${2:-"test@example.com"}
+SUBJECT=${3:-"Test Email"}
+MESSAGE=${4:-"This is a test email"}
 
 # Current timestamp in ISO format
-TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
 
 # API endpoint
-API_URL="http://localhost:3000/email/username/$USERNAME/store"
+API_URL="http://localhost:3005/email/username/$USERNAME/store"
 
 echo "Adding email to user: $USERNAME"
 echo "From: $FROM"

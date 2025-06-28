@@ -14,8 +14,8 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization']
   });
   
-  await app.listen(3000);
-  console.log('API Gateway running on port 3000');
+  await app.listen(3005);
+  console.log('API Gateway running on port 3005');
   console.log('WebSocket support enabled');
   console.log('CORS enabled for all origins');
 }

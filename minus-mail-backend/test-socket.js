@@ -1,10 +1,13 @@
-const io = require('socket.io-client');
+const { io } = require('socket.io-client');
 
 console.log('Testing WebSocket connection...');
 
-const socket = io('http://localhost:3000', {
+const socket = io('http://localhost:3005', {
   transports: ['polling', 'websocket'],
-  timeout: 20000
+  upgrade: true,
+  rememberUpgrade: true,
+  timeout: 20000,
+  forceNew: true
 });
 
 socket.on('connect', () => {

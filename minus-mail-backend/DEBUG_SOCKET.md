@@ -4,12 +4,12 @@
 
 ### 1. Test Backend Health
 ```bash
-curl http://localhost:3000/email/health
+curl http://localhost:3005/email/health
 ```
 
 ### 2. Test WebSocket Gateway
 ```bash
-curl http://localhost:3000/email/test/websocket
+curl http://localhost:3005/email/test/websocket
 ```
 
 ### 3. Test Socket Connection
@@ -23,7 +23,7 @@ node test-socket.js
 **Symptoms**: Backend fails to start or crashes
 **Solution**: 
 - Check Redis is running: `redis-cli ping`
-- Check port 3000 is available: `lsof -i :3000`
+- Check port 3005 is available: `lsof -i :3005`
 - Check logs for module import errors
 
 ### Issue 2: CORS Errors
@@ -63,10 +63,10 @@ Look for:
 ### Step 2: Test API Endpoints
 ```bash
 # Health check
-curl http://localhost:3000/email/health
+curl http://localhost:3005/email/health
 
 # WebSocket test
-curl http://localhost:3000/email/test/websocket
+curl http://localhost:3005/email/test/websocket
 ```
 
 ### Step 3: Test Socket Connection
@@ -94,7 +94,7 @@ Starting application...
 === EMAIL GATEWAY: Setting up Redis subscription ===
 === EMAIL GATEWAY: Redis subscriber connected ===
 === EMAIL GATEWAY: Redis subscription set up successfully ===
-API Gateway running on port 3000
+API Gateway running on port 3005
 WebSocket support enabled
 CORS enabled for all origins
 ```
@@ -124,11 +124,11 @@ Clients in room test: 1
 # Check if Redis is running
 redis-cli ping
 
-# Check if port 3000 is in use
-lsof -i :3000
+# Check if port 3005 is in use
+lsof -i :3005
 
-# Kill process on port 3000 if needed
-sudo kill -9 $(lsof -t -i:3000)
+# Kill process on port 3005 if needed
+sudo kill -9 $(lsof -t -i:3005)
 
 # Check backend logs
 tail -f minus-mail-backend/logs/app.log

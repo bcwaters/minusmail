@@ -9,10 +9,10 @@ This frontend application uses environment variables to configure the backend AP
 
 ```bash
 # Development (default)
-VITE_API_BASE_URL=http://localhost:3000
-VITE_WS_BASE_URL=http://localhost:3000
+VITE_API_BASE_URL=http://localhost:3005
+VITE_WS_BASE_URL=http://localhost:3005
 
-# Production - Use your domain (nginx will proxy to localhost:3000)
+# Production - Use your domain (nginx will proxy to localhost:3005)
 VITE_API_BASE_URL=https://minusmail.com
 VITE_WS_BASE_URL=https://minusmail.com
 
@@ -28,19 +28,19 @@ VITE_WS_BASE_URL=https://minusmail.com
 
 ## Usage
 
-- **Development**: Uses `http://localhost:3000` by default if no environment variables are set
-- **Production**: Set the environment variables to your production domain (nginx will proxy to localhost:3000)
+- **Development**: Uses `http://localhost:3005` by default if no environment variables are set
+- **Production**: Set the environment variables to your production domain (nginx will proxy to localhost:3005)
 - **Build**: Environment variables are embedded at build time, so make sure to set them before building
 
 ## Production Architecture
 
 ```
-Internet → Cloudflare → Nginx (minusmail.com) → Backend (localhost:3000)
+Internet → Cloudflare → Nginx (minusmail.com) → Backend (localhost:3005)
 ```
 
 - **Frontend**: Served by nginx from `/path/to/email-frontend/dist`
-- **API calls**: `https://minusmail.com/email/*` → proxied to `http://localhost:3000/email/*`
-- **WebSocket**: `https://minusmail.com/socket.io/*` → proxied to `http://localhost:3000/socket.io/*`
+- **API calls**: `https://minusmail.com/email/*` → proxied to `http://localhost:3005/email/*`
+- **WebSocket**: `https://minusmail.com/socket.io/*` → proxied to `http://localhost:3005/socket.io/*`
 
 ## Example Production Setup
 

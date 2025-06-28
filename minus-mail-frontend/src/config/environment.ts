@@ -18,8 +18,8 @@ const getEnvironmentConfig = (): EnvironmentConfig => {
 
   // Fallback to development defaults
   return {
-    apiBaseUrl: 'http://localhost:3000',
-    wsBaseUrl: 'http://localhost:3000'
+    apiBaseUrl: 'http://localhost:3005',
+    wsBaseUrl: 'http://localhost:3005'
   };
 };
 

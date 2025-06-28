@@ -77,7 +77,7 @@ To test the complete email flow:
 
 3. **Verify backend processing:**
    ```bash
-   curl http://localhost:3000/email/username/test
+   curl http://localhost:3005/email/username/test
    ```
 
 4. **Test real-time updates:**
