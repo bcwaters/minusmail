@@ -1,5 +1,5 @@
 import DOMPurify from 'dompurify';
-import root from 'react-shadow';
+import styles from './EmailDisplay.module.css';
 import type { EmailData } from '../services/ApiService'
 
 interface EmailDisplayProps {
@@ -8,6 +8,15 @@ interface EmailDisplayProps {
 
 function EmailDisplay({ email }: EmailDisplayProps) {
   console.log('EmailDisplay', email);
+  
+  if (!email) {
+    return (
+      <div className={styles['no-email']}>
+        Select an email to view its content
+      </div>
+    );
+  }
+
   const htmlContent = email?.htmlBody || '<p>No HTML content</p>';
   const textContent = email?.textBody || 'No text content';
 
@@ -17,25 +26,27 @@ function EmailDisplay({ email }: EmailDisplayProps) {
   const htmlWithText = sanitizedHtml + '<p> text content: <br/>' + textContent + '</p>';
 
   return (
-    <root.div>
-      <style>{`
-        .email-content {
-          border: 1px solid #ddd;
-          padding: 16px;
-          max-width: 600px;
-          margin: 0 auto;
-          overflow-x: auto;
-        }
-        img {
-          max-width: 100%;
-          height: auto;
-        }
-      `}</style>
+    <div className={styles['email-container']}>
+      <div className={styles['email-header']}>
+        <div className={styles['email-subject']}>
+          {email.subject || 'No Subject'}
+        </div>
+        <div className={styles['email-field']}>
+          <div className={styles['email-field-label']}>From:</div>
+          <div className={styles['email-field-value']}>{email.from || 'Unknown'}</div>
+        </div>
+        <div className={styles['email-field']}>
+          <div className={styles['email-field-label']}>Date:</div>
+          <div className={styles['email-field-value']}>
+            {email.received ? new Date(email.received).toLocaleString() : 'Unknown'}
+          </div>
+        </div>
+      </div>
       <div
-        className="email-content"
+        className={styles['email-content']}
         dangerouslySetInnerHTML={{ __html: htmlWithText }}
       />
-    </root.div>
+    </div>
   );
 }
 

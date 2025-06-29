@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import root from 'react-shadow';
+import styles from './EmailSidebar.module.css';
 
 interface EmailSidebarProps {
   email: string;
@@ -15,8 +15,18 @@ function EmailSidebar({ email, setEmail }: EmailSidebarProps) {
   };
 
   const handleSubmit = () => {
-    setCurrentAddress(inputValue);
-    setEmail(inputValue);
+    // Strip @minusmail.com if present and clean the input
+    let cleanInput = inputValue.trim();
+    if (cleanInput.endsWith('@minusmail.com')) {
+      cleanInput = cleanInput.slice(0, -13); // Remove '@minusmail.com'
+    }
+    // Remove any @ symbol if user typed it
+    if (cleanInput.startsWith('@')) {
+      cleanInput = cleanInput.slice(1);
+    }
+    
+    setCurrentAddress(cleanInput);
+    setEmail(cleanInput);
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -26,64 +36,32 @@ function EmailSidebar({ email, setEmail }: EmailSidebarProps) {
   };
 
   return (
-    <root.div>
-      <style>{`
-        input {
-          margin-right: 8px;
-          border: 2px solid blue;
-          padding: 4px;
-        }
-        button {
-          border: 2px solid green;
-          padding: 4px 8px;
-          margin: 2px;
-          cursor: pointer;
-        }
-        button:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-        }
-        h1 {
-          border: 2px solid red;
-          margin: 0;
-          padding: 8px;
-        }
-        p {
-          border: 2px solid orange;
-          margin: 4px 0;
-          padding: 4px;
-        }
-        label {
-          border: 2px solid purple;
-          display: block;
-          margin: 4px 0;
-        }
-        div {
-          border: 2px solid brown;
-          margin: 2px;
-          padding: 2px;
-        }
-      `}</style>
-      <div>
-        <h1>Email Sidebar</h1>
-        <p>Current Address: <br/>{`${currentAddress}@minusmail.com`}</p>
+    <div className={styles['email-sidebar']}>
+      <div className={styles['current-address']}>
+        <div className={styles['current-address-label']}>Current Address</div>
+        <div className={styles['current-address-value']}>{`${currentAddress}@minusmail.com`}</div>
+      </div>
 
-        <div>
-          <label htmlFor="email-input">Update Email Address:</label>
-          <input
-            id="email-input"
-            type="text"
-            value={inputValue}
-            onChange={handleInputChange}
-            onKeyPress={handleKeyPress}
-            placeholder="Enter username"
-          />
+      <div className={styles['update-section']}>
+        <label htmlFor="email-input">Update Email Address</label>
+        <div className={styles['input-group']}>
+          <div className={styles['input-wrapper']}>
+            <input
+              id="email-input"
+              type="text"
+              value={inputValue}
+              onChange={handleInputChange}
+              onKeyPress={handleKeyPress}
+              placeholder="Enter username"
+            />
+          </div>
           <button onClick={handleSubmit}>
             Update
           </button>
         </div>
+        <div className={styles['domain-suffix']}>@{inputValue || 'username'}.minusmail.com</div>
       </div>
-    </root.div>
+    </div>
   );
 }
 

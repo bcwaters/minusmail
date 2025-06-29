@@ -21,8 +21,7 @@ function App() {
       onConnectError: () => setIsConnected(false),
       onNewEmail: (emailData: EmailData) => {
         console.log('[FRONTEND] New email received:', emailData);
-        setEmailData(emailData);
-        // Add new email to the list
+        // Only add new email to the list, do not update the viewer
         setEmailList(prev => {
           console.log('[FRONTEND] Updating email list, current count:', prev.length);
           const newList = [emailData, ...prev];
@@ -69,14 +68,6 @@ function App() {
     <div className="app-container">
       <div className="app-banner">
         <AppBanner />
-        <div style={{ 
-          padding: '10px', 
-          backgroundColor: isConnected ? '#4CAF50' : '#f44336',
-          color: 'white',
-          textAlign: 'center'
-        }}>
-          Socket.IO: {isConnected ? 'Connected' : 'Disconnected'}
-        </div>
       </div>
       <div className="main-content">
         <div className="email-sidebar">
