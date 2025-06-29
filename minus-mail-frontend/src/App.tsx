@@ -11,14 +11,10 @@ function App() {
   const [emailData, setEmailData] = useState<EmailData | null>(null)
   const [emailList, setEmailList] = useState<EmailData[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const [isConnected, setIsConnected] = useState(false)
   
   useEffect(() => {
     // Connect to socket with callbacks
     socketService.connect(emailAddress, {
-      onConnect: () => setIsConnected(true),
-      onDisconnect: () => setIsConnected(false),
-      onConnectError: () => setIsConnected(false),
       onNewEmail: (emailData: EmailData) => {
         console.log('[FRONTEND] New email received:', emailData);
         // Only add new email to the list, do not update the viewer
