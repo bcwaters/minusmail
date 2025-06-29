@@ -4,7 +4,7 @@ Ephemeral email service - emails are never stored, delivered in-memory from Post
 
 ## Architecture
 
-![MinusMail Architecture](./docs/architecture-overview.jpg)
+![MinusMail Architecture](./docs/Architecture.png)
 
 ## Quick Start
 
@@ -38,12 +38,3 @@ npm run dev
 3. **Real-time Delivery**: Backend subscribes to Redis notifications
 4. **Web Client**: React frontend receives emails via WebSocket
 5. **Ephemeral**: Emails are automatically deleted from Redis after 15 minutes
-
-## Features
-
-- ✅ Real-time email delivery
-- ✅ Ephemeral storage (15min TTL)
-- ✅ WebSocket notifications
-- ✅ Modern React UI
-- ✅ Postfix integration
-- ✅ Redis pub/sub 
