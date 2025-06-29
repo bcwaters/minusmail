@@ -59,7 +59,7 @@ function EmailSidebar({ email, setEmail }: EmailSidebarProps) {
             Update
           </button>
         </div>
-        <div className={styles['domain-suffix']}>@{inputValue || 'username'}.minusmail.com</div>
+        <div className={styles['domain-suffix']}>{inputValue || 'username'}@minusmail.com</div>
       </div>
     </div>
   );
