@@ -123,12 +123,18 @@
   .email-sidebar {
     font-size: 0.95rem;
     padding: 0;
+    color: #111 !important;
   }
   .email-display {
     padding: 0;
+    color: #111 !important;
   }
   h3 {
     font-size: 1rem;
+    color: #111 !important;
+  }
+  body, html {
+    color: #111 !important;
   }
 }
 
