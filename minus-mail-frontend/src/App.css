@@ -115,8 +115,7 @@
 
 @media (max-width: 500px) {
   .app-banner {
-    font-size: 1.1rem;
-    padding: 8px 0;
+    display: none !important;
   }
   .main-content {
     padding: 0 2px;
