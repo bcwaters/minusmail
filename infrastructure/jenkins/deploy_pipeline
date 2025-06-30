@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+    tools { nodejs 'NodeJS' }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'prod', url: 'https://github.com/bcwaters/minusmail'
+            }
+        }
+        stage('Build Frontend') {
+            steps {
+                dir('minus-mail-frontend') {
+                    sh 'npm install --save-dev @types/node'
+                    sh 'npm run build'
+                }
+            }
+        }
+        stage('Build Backend') {
+            steps {
+                dir('minus-mail-backend') {
+                    sh 'npm install'
+                    sh 'npm run build'
+                }
+            }
+        }
+        stage('Deploy to EC2') {
+            steps {
+                script {
+                    sshPublisher(
+                        publishers: [
+                            sshPublisherDesc(
+                                configName: 'EC2-Server',
+                                transfers: [
+                                    sshTransfer(sourceFiles: 'minus-mail-frontend/dist/**', remoteDirectory: '/prod/minusmail/', removePrefix: 'minus-mail-frontend/dist'),
+                                    sshTransfer(sourceFiles: 'minus-mail-backend/{dist/**,package.json,package-lock.json}', remoteDirectory: '/prod/minusmail/', removePrefix: 'minus-mail-backend'),
+                                    sshTransfer(execCommand: 'cd /home/ubuntu/prod/minusmail/minus-mail-backend && npm install --omit=dev > /home/ubuntu/deploy_npm.log 2>&1 || echo "npm install failed" >> /home/ubuntu/deploy_npm.log'),
+                                    sshTransfer(execCommand: 'pm2 start /home/ubuntu/prod/minusmail/minus-mail-backend/dist/main.js --name minusmail-backend -f --update-env > /home/ubuntu/deploy_pm2.log 2>&1 || echo "pm2 start failed" >> /home/ubuntu/deploy_pm2.log'),
+                                    sshTransfer(execCommand: 'pm2 save > /home/ubuntu/deploy_pm2_save.log 2>&1 || echo "pm2 save failed" >> /home/ubuntu/deploy_pm2_save.log'),
+                                    sshTransfer(sourceFiles: 'deploy_*.log', remoteDirectory: '/home/ubuntu', execCommand: 'rm /home/ubuntu/deploy_*.log')
+                                ]
+                            )
+                        ]
+                    )
+                }
+            }
+        }
+        stage('Display Logs') {
+            steps {
+                sh 'cat deploy_*.log || echo "No logs found"'
+            }
+        }
+    }
+}
