@@ -1,22 +1,24 @@
 .email-sidebar {
   padding: 16px;
-  background: #f8f9fa;
+  background: #232526;
   border-radius: 8px;
   margin-bottom: 16px;
+  color: #e0e0e0;
 }
 
 .current-address {
-  background: #e3f2fd;
-  border: 1px solid #2196f3;
+  background: #18191a;
+  border: none;
   border-radius: 6px;
   padding: 12px;
   margin-bottom: 16px;
   text-align: center;
+  color: #e0e0e0;
 }
 
 .current-address-label {
   font-size: 12px;
-  color: #666;
+  color: #888;
   margin-bottom: 4px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -26,7 +28,7 @@
 .current-address-value {
   font-size: 16px;
   font-weight: 600;
-  color: #1976d2;
+  color: #fff;
   word-break: break-all;
 }
 
@@ -50,22 +52,22 @@
 input {
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid #ddd;
+  border: none;
   border-radius: 4px;
   font-size: 14px;
   outline: none;
-  transition: border-color 0.2s;
-  background: white;
+  background: #18191a;
+  color: #e0e0e0;
   box-sizing: border-box;
 }
 
 input:focus {
-  border-color: #2196f3;
-  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+  border: 1px solid #646cff;
+  box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.1);
 }
 
 .domain-suffix {
-  color: #999;
+  color: #888;
   font-size: 12px;
   margin-top: 4px;
   text-align: center;
@@ -73,7 +75,7 @@ input:focus {
 
 button {
   padding: 8px 12px;
-  background: #2196f3;
+  background: #646cff;
   color: white;
   border: none;
   border-radius: 4px;
@@ -86,7 +88,7 @@ button {
 }
 
 button:hover {
-  background: #1976d2;
+  background: #535bf2;
 }
 
 button:disabled {
@@ -99,5 +101,5 @@ label {
   margin-bottom: 6px;
   font-size: 14px;
   font-weight: 500;
-  color: #333;
+  color: #e0e0e0;
 } 

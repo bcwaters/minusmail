@@ -1,0 +1,47 @@
+.inboxContainer {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #444444;
+  border-radius: 18px;
+}
+
+.inboxTitle {
+  margin: 0 0 10px 0;
+  font-size: 1.1rem;
+  color: #e0e0e0;
+  font-weight: 600;
+}
+
+.emailList {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.emailItem {
+  padding: 8px;
+  margin: 4px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #e0e0e0;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.emailItemSelected {
+  background-color: #353a40;
+  box-shadow: 0 2px 8px rgba(100,108,255,0.10);
+}
+
+.emailSubject {
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.emailFrom {
+  font-size: 11px;
+  color: #666;
+}
+
+.emailDate {
+  font-size: 10px;
+  color: #999;
+} 

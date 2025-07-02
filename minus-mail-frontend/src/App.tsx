@@ -5,6 +5,7 @@ import EmailSidebar from './components/EmailSidebar'
 import AppBanner from './components/AppBanner'
 import { socketService } from './services/SocketService'
 import { apiService, type EmailData } from './services/ApiService'
+import Inbox from './components/Inbox'
 
 function App() {
   const [emailAddress, setEmailAddress] = useState('test')
@@ -69,43 +70,12 @@ function App() {
         <div className="email-sidebar">
           <EmailSidebar email={emailAddress} 
                         setEmail={setEmailAddress} />
-          
-          {/* Email List */}
-          <div style={{ marginTop: '20px', padding: '10px' }}>
-            <h3>📬 Email List ({emailList.length})</h3>
-            {isLoading ? (
-              <div>Loading emails...</div>
-            ) : emailList.length === 0 ? (
-              <div>No emails yet</div>
-            ) : (
-              <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
-                {emailList.map((email, index) => (
-                  <div 
-                    key={index}
-                    onClick={() => handleEmailSelect(email)}
-                    style={{
-                      padding: '8px',
-                      margin: '4px 0',
-                      border: '1px solid #ddd',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                      backgroundColor: emailData === email ? '#e3f2fd' : '#f9f9f9'
-                    }}
-                  >
-                    <div style={{ fontWeight: 'bold', fontSize: '12px' }}>
-                      {email.subject || 'No Subject'}
-                    </div>
-                    <div style={{ fontSize: '11px', color: '#666' }}>
-                      From: {email.from}
-                    </div>
-                    <div style={{ fontSize: '10px', color: '#999' }}>
-                      {new Date(email.received).toLocaleString()}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <Inbox 
+            emailList={emailList}
+            isLoading={isLoading}
+            emailData={emailData}
+            handleEmailSelect={handleEmailSelect}
+          />
         </div>
         <div className="email-display">
           <EmailDisplay email={emailData} />
