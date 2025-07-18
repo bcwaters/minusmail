@@ -3,27 +3,27 @@
   align-items: center;
   justify-content: center;
   height: 400px;
-  color: #aaa;
+  color: #666;
   font-size: 16px;
-  background: #232526;
+  background: #fff;
   border-radius: 8px;
-  border: none;
+  border: 1px solid #ddd;
 }
 
 .email-container {
   max-width: 800px;
   margin: 0 auto;
-  background: #533903;
+  background: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   overflow: hidden;
-  color: #e0e0e0;
+  color: #000;
 }
 
 .email-header {
-  background: #18191a;
+  background: #D7ECFF;
   padding: 20px;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid #ddd;
 }
 
 .email-field {
@@ -38,7 +38,7 @@
 
 .email-field-label {
   font-weight: 600;
-  color: #b0b0b0;
+  color: #000;
   min-width: 80px;
   margin-right: 12px;
   font-size: 14px;
@@ -46,7 +46,7 @@
 
 .email-field-value {
   flex: 1;
-  color: #e0e0e0;
+  color: #000;
   font-size: 14px;
   word-break: break-word;
 }
@@ -54,17 +54,17 @@
 .email-subject {
   font-size: 18px;
   font-weight: 600;
-  color: #fff;
+  color: #000;
   margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid #ddd;
 }
 
 .email-content {
   padding: 20px;
   overflow-x: auto;
   line-height: 1.6;
-  color: #e0e0e0;
+  color: #000;
 }
 
 .email-content img {
@@ -79,5 +79,5 @@
 .email-content h1, .email-content h2, .email-content h3 {
   margin-top: 20px;
   margin-bottom: 12px;
-  color: #fff;
+  color: #000;
 } 

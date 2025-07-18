@@ -64,12 +64,14 @@ function App() {
   return (
     <div className="app-container">
       <div className="app-banner">
-        <AppBanner />
+        <AppBanner email={emailAddress} setEmail={setEmailAddress} emailList={emailList} isLoading={isLoading} emailData={emailData} handleEmailSelect={handleEmailSelect} />
       </div>
       <div className="main-content">
+
         <div className="email-sidebar">
           <EmailSidebar email={emailAddress} 
                         setEmail={setEmailAddress} />
+
           <Inbox 
             emailList={emailList}
             isLoading={isLoading}

@@ -1,14 +1,15 @@
 .inboxContainer {
   margin-top: 20px;
   padding: 10px;
-  border: 1px solid #444444;
+  border: 1px solid #FBA43F;
   border-radius: 18px;
+  background: #fff;
 }
 
 .inboxTitle {
   margin: 0 0 10px 0;
   font-size: 1.1rem;
-  color: #e0e0e0;
+  color: #000;
   font-weight: 600;
 }
 
@@ -22,18 +23,21 @@
   margin: 4px 0;
   border-radius: 4px;
   cursor: pointer;
-  color: #e0e0e0;
+  color: #000;
   transition: background 0.2s, box-shadow 0.2s;
+  border: 1px solid #ddd;
 }
 
 .emailItemSelected {
-  background-color: #353a40;
-  box-shadow: 0 2px 8px rgba(100,108,255,0.10);
+  background-color: #D7ECFF;
+  box-shadow: 0 2px 8px rgba(251, 164, 63, 0.2);
+  border-color: #FBA43F;
 }
 
 .emailSubject {
   font-weight: bold;
   font-size: 12px;
+  color: #000;
 }
 
 .emailFrom {
