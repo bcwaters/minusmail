@@ -9,7 +9,7 @@ TTL: 15 minutes per email (String) and Set.
 
 Example Commands
 # Store email
-SETEX 1234-5678-9012 900 '{"from":"sender@example.com","subject":"Test","htmlBody":"...","textBody":"...","received":"2025-06-26T17:00:00Z"}'
+SETEX 1234-5678-9012 900 '{"from":"sender@minusmail.com","subject":"Test","htmlBody":"...","textBody":"...","received":"2025-06-26T17:00:00Z"}'
 SADD emails:test 1234-5678-9012
 EXPIRE emails:test 900
 
