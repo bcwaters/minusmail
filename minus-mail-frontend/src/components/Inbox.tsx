@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import type { EmailData } from '../services/ApiService';
 import styles from './Inbox.module.css';
 
@@ -10,6 +10,13 @@ interface InboxProps {
 }
 
 const Inbox: React.FC<InboxProps> = ({ emailList, isLoading, emailData, handleEmailSelect }) => {
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className={styles.inboxContainer}>
       <h3 className={styles.inboxTitle}>📬 Inbox ({emailList.length})</h3>
@@ -37,6 +44,15 @@ const Inbox: React.FC<InboxProps> = ({ emailList, isLoading, emailData, handleEm
               </div>
               <div className={styles.emailDate}>
                 {new Date(email.received).toLocaleString()}
+                {(() => {
+                  const received = new Date(email.received);
+                  const expires = new Date(received.getTime() + 10 * 60 * 1000);
+                  const msLeft = expires.getTime() - now;
+                  if (msLeft <= 0) return ' (expired)';
+                  const min = Math.floor(msLeft / 60000);
+                  const sec = Math.floor((msLeft % 60000) / 1000);
+                  return ` (expires in ${min}:${sec.toString().padStart(2, '0')})`;
+                })()}
               </div>
             </div>
           ))}
