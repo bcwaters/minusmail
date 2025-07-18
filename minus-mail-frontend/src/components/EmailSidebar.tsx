@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './EmailSidebar.module.css';
+import CurrentAddress from './CurrentAddress';
 
 interface EmailSidebarProps {
   email: string;
@@ -37,10 +38,7 @@ function EmailSidebar({ email, setEmail }: EmailSidebarProps) {
 
   return (
     <div className={styles['email-sidebar']}>
-      <div className={styles['current-address']}>
-        <div className={styles['current-address-label']}>Current Address</div>
-        <div className={styles['current-address-value']}>{`${currentAddress}@minusmail.com`}</div>
-      </div>
+      <CurrentAddress currentAddress={currentAddress} />
 
       <div className={styles['update-section']}>
         <label htmlFor="email-input">Update Email Address</label>

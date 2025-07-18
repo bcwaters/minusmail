@@ -145,13 +145,23 @@
     color: #111 !important;
   }
   body, html {
+    margin: 0;
     color: #111 !important;
   }
+}
+
+.email-nav-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
 }
 
 /* Prevent horizontal overflow */
 body, html, .app-container {
   background: #fff;
   color: #000;
+  margin: 0;
   overflow-x: hidden;
 }

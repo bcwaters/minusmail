@@ -6,9 +6,10 @@ import AppBanner from './components/AppBanner'
 import { socketService } from './services/SocketService'
 import { apiService, type EmailData } from './services/ApiService'
 import Inbox from './components/Inbox'
+import CurrentAddress from './components/CurrentAddress'
 
 function App() {
-  const [emailAddress, setEmailAddress] = useState('test')
+  const [emailAddress, setEmailAddress] = useState('update_to_another_email')
   const [emailData, setEmailData] = useState<EmailData | null>(null)
   const [emailList, setEmailList] = useState<EmailData[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -67,7 +68,10 @@ function App() {
         <AppBanner email={emailAddress} setEmail={setEmailAddress} emailList={emailList} isLoading={isLoading} emailData={emailData} handleEmailSelect={handleEmailSelect} />
       </div>
       <div className="main-content">
-
+        <div className="email-container">
+        <div className="email-nav-bar">
+          <CurrentAddress currentAddress={emailAddress} />
+        </div>
         <div className="email-sidebar">
           <EmailSidebar email={emailAddress} 
                         setEmail={setEmailAddress} />
@@ -81,6 +85,7 @@ function App() {
         </div>
         <div className="email-display">
           <EmailDisplay email={emailData} />
+        </div>
         </div>
       </div>
     </div>
