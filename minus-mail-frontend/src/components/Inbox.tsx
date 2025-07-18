@@ -17,6 +17,43 @@ const Inbox: React.FC<InboxProps> = ({ emailList, isLoading, emailData, handleEm
     return () => clearInterval(interval);
   }, []);
 
+  const handleDownload = (email: EmailData) => {
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>${email.subject || 'No Subject'}</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    .header { margin-bottom: 2em; }
+    .label { font-weight: bold; }
+    .content { border-top: 1px solid #ccc; margin-top: 2em; padding-top: 1em; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div><span class="label">Subject:</span> ${email.subject || 'No Subject'}</div>
+    <div><span class="label">From:</span> ${email.from || 'Unknown'}</div>
+    <div><span class="label">Received:</span> ${new Date(email.received).toLocaleString()}</div>
+  </div>
+  <div class="content">
+    ${email.htmlBody || '<p>No HTML content</p>'}
+  </div>
+</body>
+</html>`;
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${email.subject ? email.subject.replace(/[^a-z0-9]/gi, '_').toLowerCase() : 'email'}.html`;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 0);
+  };
+
   return (
     <div className={styles.inboxContainer}>
       <h3 className={styles.inboxTitle}>📬 Inbox ({emailList.length})</h3>
@@ -54,6 +91,14 @@ const Inbox: React.FC<InboxProps> = ({ emailList, isLoading, emailData, handleEm
                   return ` (expires in ${min}:${sec.toString().padStart(2, '0')})`;
                 })()}
               </div>
+              <button
+                type="button"
+                className={styles.downloadButton}
+                onClick={e => { e.stopPropagation(); handleDownload(email); }}
+                title="Download as HTML"
+              >
+                Download
+              </button>
             </div>
           ))}
         </div>
