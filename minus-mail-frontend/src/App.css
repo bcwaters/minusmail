@@ -9,6 +9,7 @@
 }
 
 .app-container {
+  
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -28,16 +29,16 @@
 
 .main-content {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  width: 100%;
+ 
   max-width: 1200px;
-  margin: 0 auto;
+ 
   flex: 1;
   background: #fff;
   color: #000;
-  padding-left: 0;
+  margin: 20px;
 }
 
 .email-sidebar {
@@ -48,17 +49,26 @@
   flex-shrink: 0;
   border: none;
   background: #fff;
-  padding: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
   overflow-y: auto;
   color: #000;
   margin-left: 0;
+}
+
+.email-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
 }
 
 .email-display {
   flex: 1;
   min-width: 0;
   box-sizing: border-box;
-  padding: 24px 0 24px 24px;
+ 
   overflow: auto;
   background: #fff;
   border: none;
@@ -126,36 +136,81 @@
 
 @media (max-width: 500px) {
   .app-banner {
-    display: none !important;
+    display: flex !important;
+    padding: 8px 0;
+    font-size: 0.95rem;
+    min-height: 32px;
+    line-height: 1.15;
+    text-align: center;
   }
   .main-content {
     padding: 0 2px;
+    font-size: 0.95rem;
   }
   .email-sidebar {
-    font-size: 0.95rem;
+    font-size: 0.90rem;
     padding: 0;
     color: #111 !important;
   }
   .email-display {
     padding: 0;
     color: #111 !important;
+    font-size: 0.95rem;
   }
   h3 {
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: #111 !important;
   }
   body, html {
     margin: 0;
     color: #111 !important;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .main-content {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0 2px;
+    max-width: 100%;
+  }
+  .email-sidebar {
+    max-width: 100%;
+    min-width: 0;
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 0 4px;
+    font-size: 0.98rem;
+  }
+  .email-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .email-display {
+    padding: 0 4px 8px 4px;
+    min-width: 0;
+    font-size: 0.98rem;
+  }
+  .card {
+    padding: 1em;
+    border-radius: 8px;
+  }
+  h3 {
+    font-size: 1.05rem;
+  }
+  .app-container {
+    padding: 5px;
   }
 }
 
 .email-nav-bar {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
+  align-items: left;
+ 
   width: 100%;
+  margin-top:10px;
 }
 
 /* Prevent horizontal overflow */

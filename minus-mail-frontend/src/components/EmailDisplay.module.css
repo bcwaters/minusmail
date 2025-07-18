@@ -81,3 +81,42 @@
   margin-bottom: 12px;
   color: #000;
 } 
+
+@media (max-width: 600px) {
+  .email-container {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .email-header {
+    padding: 12px;
+  }
+  .email-subject {
+    font-size: 16px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+  }
+  .email-field {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+  .email-field-label {
+    min-width: 0;
+    margin-right: 0;
+    font-size: 13px;
+  }
+  .email-field-value {
+    font-size: 13px;
+  }
+  .email-content {
+    padding: 12px;
+    font-size: 14px;
+  }
+  .no-email {
+    height: 200px;
+    font-size: 14px;
+    border-radius: 0;
+  }
+} 

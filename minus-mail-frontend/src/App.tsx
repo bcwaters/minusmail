@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import EmailDisplay from './components/EmailDisplay'
 import './App.css'
-import EmailSidebar from './components/EmailSidebar'
+
 import AppBanner from './components/AppBanner'
 import { socketService } from './services/SocketService'
 import { apiService, type EmailData } from './services/ApiService'
 import Inbox from './components/Inbox'
 import CurrentAddress from './components/CurrentAddress'
+import EmailInput from './components/EmailInput'
 
 function App() {
   const [emailAddress, setEmailAddress] = useState('update_to_another_email')
@@ -68,14 +69,14 @@ function App() {
         <AppBanner email={emailAddress} setEmail={setEmailAddress} emailList={emailList} isLoading={isLoading} emailData={emailData} handleEmailSelect={handleEmailSelect} />
       </div>
       <div className="main-content">
-        <div className="email-container">
-        <div className="email-nav-bar">
-          <CurrentAddress currentAddress={emailAddress} />
-        </div>
-        <div className="email-sidebar">
-          <EmailSidebar email={emailAddress} 
-                        setEmail={setEmailAddress} />
 
+        <div className="email-container">
+        <div className="email-sidebar">
+        <div className="email-nav-bar">
+          <CurrentAddress currentAddress={emailAddress} /> 
+        </div>
+        <EmailInput currentEmail={emailAddress} onEmailUpdate={setEmailAddress} />
+        
           <Inbox 
             emailList={emailList}
             isLoading={isLoading}
