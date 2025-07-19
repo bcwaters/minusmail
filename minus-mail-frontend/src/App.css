@@ -5,12 +5,15 @@
   text-align: left;
   height: 100vh;
   display: flex;
+  align-items: center;
   flex-direction: column;
 }
 
 .app-container {
-  
+  width: 100%;
+  max-width: 1200px;
   min-height: 100vh;
+
   display: flex;
   flex-direction: column;
 }
