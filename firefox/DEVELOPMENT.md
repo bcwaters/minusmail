@@ -79,15 +79,52 @@ Content-Type: application/json
 
 ## Debugging
 
+### Visual Feedback (Recommended)
+The extension now provides visual feedback through toast notifications:
+- **Green toast**: Success (email autocompleted, code filled)
+- **Red toast**: Error (username not available, no input found)
+- **Blue toast**: Info messages
+
+**To test:**
+1. Navigate to any website with email or verification code inputs
+2. Click or focus on the input field
+3. Look for toast notifications in the top-right corner of the page
+4. Use **Ctrl+Shift+E** to manually trigger email autocomplete
+
 ### Console Logs
-- Content script logs appear in the web page console
-- Background script logs appear in the browser console
-- Popup logs appear in the popup console
+
+#### Method 1: Browser Console (Recommended)
+1. Press `Ctrl+Shift+J` (or `Cmd+Shift+J` on Mac) to open Browser Console
+2. In the dropdown at the top, select your extension's content script
+3. View all MinusMail debug logs
+
+#### Method 2: Extension Debugging Console
+1. Go to `about:debugging` in Firefox
+2. Click "This Firefox" tab
+3. Find your MinusMail extension in the list
+4. Click "Inspect" next to the extension
+5. This opens a dedicated console for your extension
+
+#### Method 3: Web Console with Content Script Filter
+1. Press `F12` and go to Console tab
+2. Look for a filter option and select "Content Scripts" or your extension name
+3. View MinusMail logs there
+
+### Debug Information Available
+
+The extension logs detailed information about:
+- **Username loading**: When username is loaded from background script
+- **Field detection**: How many email/verification inputs are found
+- **Event listeners**: When listeners are attached to input fields
+- **Autocomplete process**: Step-by-step autocomplete execution
+- **Error conditions**: Why autocomplete might fail
 
 ### Common Issues
 1. **API Key Not Set**: Check if the API key is properly saved
 2. **CORS Issues**: Ensure the API endpoint allows Firefox extension requests
 3. **Input Detection**: Verify the selectors match your target websites
+4. **Username Not Loaded**: Check if background script successfully loaded username
+5. **No Toast Notifications**: Ensure content script is running on the page
 
 ## Building for Production
 

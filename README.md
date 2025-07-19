@@ -38,3 +38,7 @@ npm run dev
 3. **Real-time Delivery**: Backend subscribes to Redis notifications
 4. **Web Client**: React frontend receives emails via WebSocket
 5. **Ephemeral**: Emails are automatically deleted from Redis after 15 minutes
+
+
+### Possible uses
+MCP server for automatic sign up with an ai agent, simply needs an api endpoint that filters by hostname (ie sign up on facebook filter by facebook.com)

@@ -1,6 +1,7 @@
 # MinusMail Firefox Extension
 
 A Firefox browser extension that automatically fills verification codes from the MinusMail API into web forms.
+No need to expose or manage your own email address
 
 ## Features
 
@@ -17,10 +18,6 @@ A Firefox browser extension that automatically fills verification codes from the
    - Click "This Firefox" → "Load Temporary Add-on..."
    - Select the `manifest.json` file from this directory
 
-2. **Configure API Key**:
-   - Click the MinusMail extension icon in your toolbar
-   - Enter your MinusMail API key
-   - Click "Save API Key"
 
 3. **Start Using**:
    - Navigate to any website with verification code fields
@@ -41,10 +38,3 @@ See [DEVELOPMENT.md](./DEVELOPMENT.md) for detailed development instructions.
 
 ## API Requirements
 
-The extension requires a MinusMail API key and communicates with:
-- `https://api.minusmail.com/verification-codes/latest`
-- `https://api.minusmail.com/status`
-
-## License
-
-MIT License - see LICENSE file for details.
