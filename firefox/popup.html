@@ -10,8 +10,21 @@
   <div class="container">
     <header>
       <h1>MinusMail</h1>
-      <p class="subtitle">Verification Code Autocomplete</p>
+
     </header>
+
+    <div class="user-section">
+      <div class="user-info">
+        <label for="username">Current Username:</label>
+        <input type="text" id="username" placeholder="Enter username" readonly>
+      </div>
+      <div class="inbox-info">
+        <label for="inbox">Email Count:</label>
+        <input type="text" id="inbox" placeholder="0 emails" readonly>
+      </div>
+    </div>
+
+    <img src="icons/icon-96.png" alt="MinusMail Icon" width="80" height="80" style="position: fixed; top: 5px; left: 5px; z-index: 1000;">
 
     <div class="status-section">
       <div id="status-indicator" class="status-indicator">

@@ -102,4 +102,4 @@ new-email → Channel for real-time notifications
 
 send email: echo "Subject: Test Email\n\nThis is a test email body." | sendmail -f sender@minusmail.com test@minusmail.com
 
-echo -e "From: sender@minusmail.com\nTo: minus@minusmail.com\nSubject: Test Email\n\nAnother email." | sendmail test@minusmail.com
+echo -e "From: sender@minusmail.com\nTo: test@minusmail.com\nSubject: Test Email\n\nAnother email." | sendmail test@minusmail.com

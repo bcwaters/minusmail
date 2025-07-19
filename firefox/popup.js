@@ -3,6 +3,7 @@
 
 class MinusMailPopup {
   constructor() {
+    this.username = null;
     this.init();
   }
 
@@ -10,8 +11,112 @@ class MinusMailPopup {
     // Load initial state
     this.checkStatus();
     
+    // Get username from background script
+    this.getUsername();
+    
     // Set up event listeners
     this.setupEventListeners();
+    
+    // Listen for username loaded notifications
+    this.setupMessageListener();
+  }
+
+  setupMessageListener() {
+    // Listen for messages from background script
+    browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      if (message.type === 'USERNAME_LOADED') {
+        this.username = message.username;
+        this.updateUsernameDisplay();
+        this.getUserInfo(); // Refresh user info with new username
+      }
+    });
+  }
+
+  async getUsername() {
+    try {
+      const response = await browser.runtime.sendMessage({
+        type: 'GET_CURRENT_USERNAME'
+      });
+      
+      if (response.username) {
+        this.username = response.username;
+        this.updateUsernameDisplay();
+        this.getUserInfo(); // Get user info with the username
+      } else {
+        // Fallback if username not loaded yet
+        this.username = 'user';
+        this.updateUsernameDisplay();
+        this.getUserInfo();
+      }
+    } catch (error) {
+      console.error('Error getting username:', error);
+      this.username = 'user';
+      this.updateUsernameDisplay();
+      this.getUserInfo();
+    }
+  }
+
+  updateUsernameDisplay() {
+    const usernameField = document.getElementById('username');
+    if (usernameField) {
+      usernameField.value = this.username || 'Not available';
+    }
+  }
+
+  async getUserInfo() {
+    if (!this.username) {
+      this.setDefaultValues();
+      return;
+    }
+    
+    try {
+      console.log(`Fetching emails for user: ${this.username}`);
+      const response = await fetch(`http://localhost:3005/email/username/${this.username}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log('Response status:', response.status);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('API response:', data);
+        
+        // Set the email count
+        const inboxField = document.getElementById('inbox');
+        if (inboxField && data.emailCount !== undefined) {
+          inboxField.value = `${data.emailCount} emails`;
+        } else if (inboxField) {
+          // If emailCount is not in response, try to count emails array
+          if (data.emails && Array.isArray(data.emails)) {
+            inboxField.value = `${data.emails.length} emails`;
+          } else {
+            inboxField.value = '0 emails';
+          }
+        }
+      } else {
+        console.error('Failed to fetch emails:', response.status);
+        this.setDefaultValues();
+      }
+    } catch (error) {
+      console.error('Error fetching emails:', error);
+      this.setDefaultValues();
+    }
+  }
+
+  setDefaultValues() {
+    // Set default values if API call fails
+    const usernameField = document.getElementById('username');
+    if (usernameField) {
+      usernameField.value = this.username || 'Not available';
+    }
+    
+    const inboxField = document.getElementById('inbox');
+    if (inboxField) {
+      inboxField.value = '0 emails';
+    }
   }
 
   setupEventListeners() {
