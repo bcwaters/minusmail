@@ -199,6 +199,10 @@ export declare class ApiGatewayController {
         count?: undefined;
         note?: undefined;
     }>;
+    getStatus(): Promise<{
+        status: string;
+        message: string;
+    }>;
     getEmailListCount(emailId: string): Promise<{
         status: string;
         emailId: string;

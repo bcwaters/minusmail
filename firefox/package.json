@@ -1,0 +1,35 @@
+{
+  "name": "minusmail-firefox-extension",
+  "version": "1.0.0",
+  "description": "Firefox extension for MinusMail verification code autocomplete",
+  "main": "manifest.json",
+  "scripts": {
+    "build": "echo 'No build process needed for Firefox extension'",
+    "test": "echo 'Run tests manually in Firefox'",
+    "lint": "echo 'Add linting tools as needed'",
+    "package": "zip -r minusmail-extension.zip . -x '*.git*' 'node_modules/*' '*.DS_Store'"
+  },
+  "keywords": [
+    "firefox",
+    "extension",
+    "minusmail",
+    "autocomplete",
+    "verification",
+    "codes"
+  ],
+  "author": "MinusMail Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/minusmail.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/minusmail/issues"
+  },
+  "homepage": "https://github.com/your-org/minusmail#readme",
+  "devDependencies": {},
+  "dependencies": {},
+  "engines": {
+    "firefox": ">=60.0"
+  }
+} 

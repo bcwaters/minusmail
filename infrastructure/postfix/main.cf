@@ -1,0 +1,34 @@
+# Basic settings
+myhostname = mail.minusmail.com
+myorigin = $mydomain
+mydestination =
+inet_interfaces = all
+inet_protocols = all
+
+# Virtual domain and transport config
+virtual_alias_domains = minusmail.com
+virtual_alias_maps = hash:/etc/postfix/virtual
+transport_maps = hash:/etc/postfix/transport
+
+# Trusted networks
+mynetworks = 127.0.0.0/8 [::1]/128
+
+# Alias & mailbox
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+recipient_delimiter = +
+mailbox_size_limit = 51200000
+
+# TLS (use real certs in production)
+smtpd_tls_cert_file = /etc/ssl/certs/ssl-cert-snakeoil.pem
+smtpd_tls_key_file = /etc/ssl/private/ssl-cert-snakeoil.key
+smtpd_tls_security_level = may
+smtp_tls_security_level = may
+smtp_tls_CApath = /etc/ssl/certs
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+
+# Relay restrictions
+smtpd_relay_restrictions = permit_mynetworks, permit_sasl_authenticated, defer_unauth_destination
+
+# Banner
+smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)

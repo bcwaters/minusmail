@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MinusMail Extension Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus, input[type="email"]:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .test-info {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #495057;
+        }
+        .verification-section {
+            border: 2px dashed #007bff;
+            padding: 20px;
+            border-radius: 4px;
+            margin: 20px 0;
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MinusMail Extension Test Page</h1>
+        
+        <div class="test-info">
+            <strong>Instructions:</strong> Load the MinusMail Firefox extension and click on any of the verification code input fields below. The extension should automatically fill them with the latest code from your MinusMail API.
+        </div>
+
+        <form>
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email">
+            </div>
+
+            <div class="verification-section">
+                <h3>Verification Code Fields (Click to test autocomplete)</h3>
+                
+                <div class="form-group">
+                    <label for="verification-code">Verification Code:</label>
+                    <input type="text" id="verification-code" name="verification-code" maxlength="6" placeholder="Enter verification code">
+                </div>
+
+                <div class="form-group">
+                    <label for="otp">OTP Code:</label>
+                    <input type="text" id="otp" name="otp" maxlength="8" placeholder="Enter OTP code">
+                </div>
+
+                <div class="form-group">
+                    <label for="code">Code:</label>
+                    <input type="text" id="code" name="code" placeholder="Enter code">
+                </div>
+
+                <div class="form-group">
+                    <label for="two-factor">Two-Factor Code:</label>
+                    <input type="text" id="two-factor" name="two-factor" maxlength="6" placeholder="Enter 2FA code">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="text" id="password" name="password" placeholder="Enter password">
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <div class="test-info" style="margin-top: 30px;">
+            <strong>Expected Behavior:</strong>
+            <ul style="margin-top: 10px;">
+                <li>Clicking on any verification code field should trigger the extension</li>
+                <li>The field should be automatically filled with the latest code from MinusMail</li>
+                <li>Check the browser console for extension logs</li>
+                <li>Use the extension popup to test API connection and manual code retrieval</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Add some dynamic content to test mutation observer
+        setTimeout(() => {
+            const form = document.querySelector('form');
+            const dynamicField = document.createElement('div');
+            dynamicField.className = 'form-group';
+            dynamicField.innerHTML = `
+                <label for="dynamic-code">Dynamic Code Field:</label>
+                <input type="text" id="dynamic-code" name="dynamic-code" maxlength="6" placeholder="Dynamically added field">
+            `;
+            form.insertBefore(dynamicField, form.querySelector('button'));
+        }, 3000);
+    </script>
+</body>
+</html> 

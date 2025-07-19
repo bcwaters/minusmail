@@ -303,6 +303,12 @@ let ApiGatewayController = class ApiGatewayController {
             };
         }
     }
+    async getStatus() {
+        return {
+            status: 'ok',
+            message: 'MinusMail API is running'
+        };
+    }
     async getEmailListCount(emailId) {
         try {
             const length = await this.redisService.getEmailListLength(emailId);
@@ -419,6 +425,12 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ApiGatewayController.prototype, "getEmailList", null);
+__decorate([
+    (0, common_1.Get)('status'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ApiGatewayController.prototype, "getStatus", null);
 __decorate([
     (0, common_1.Get)('list/:emailId/count'),
     __param(0, (0, common_1.Param)('emailId')),

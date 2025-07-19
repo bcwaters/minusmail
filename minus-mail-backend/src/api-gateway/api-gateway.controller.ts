@@ -363,6 +363,14 @@ export class ApiGatewayController {
     }
   }
 
+  @Get('status')
+  async getStatus() {
+    return {
+      status: 'ok',
+      message: 'MinusMail API is running'
+    };
+  }
+
   @Get('list/:emailId/count')
   async getEmailListCount(@Param('emailId') emailId: string) {
     try {

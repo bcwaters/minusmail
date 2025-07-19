@@ -1,0 +1,4 @@
+#append to bottom
+# Custom pipe transport
+minusmail-pipe unix  -       n       n       -       -       pipe
+  flags=F user=ubuntu argv=/usr/bin/node /home/ubuntu/minusmail/infrastructure/EmailProcessorScript.js ${user}

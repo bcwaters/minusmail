@@ -1,0 +1,3 @@
+# Pipe domain emails via minusmail-pipe
+minusmail.com    minusmail-pipe:
+localhost        minusmail-pipe:
