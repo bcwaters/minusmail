@@ -9,6 +9,8 @@ import { apiService, type EmailData } from './services/ApiService'
 import Inbox from './components/Inbox'
 import CurrentAddress from './components/CurrentAddress'
 import EmailInput from './components/EmailInput'
+// Import test utilities for verification code testing
+import './testing/testVerificationCode'
 
 // Component that handles the email functionality with routing
 function EmailApp() {
