@@ -8,9 +8,6 @@ class MinusMailPopup {
   }
 
   init() {
-    // Load initial state
-    this.checkStatus();
-    
     // Get username from background script (with small delay to allow installation to complete)
     setTimeout(() => {
       this.getUsername();
@@ -30,6 +27,7 @@ class MinusMailPopup {
     // Listen for messages from background script
     browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
       if (message.type === 'USERNAME_LOADED') {
+        console.log('MinusMail Popup: Received USERNAME_LOADED message:', message.username);
         this.username = message.username;
         this.updateUsernameDisplay();
         this.getUserInfo(); // Refresh user info with new username
@@ -51,7 +49,13 @@ class MinusMailPopup {
         // No username available yet (fresh installation)
         this.username = null;
         this.updateUsernameDisplay();
-        // Don't call getUserInfo() until we have a username
+        
+        // Check if this is a fresh installation and wait for username generation
+        const isNewInstall = await browser.storage.local.get('isNewInstallation');
+        if (isNewInstall.isNewInstallation) {
+          console.log('MinusMail Popup: Fresh installation detected, waiting for username generation...');
+          this.waitForUsernameGeneration();
+        }
       }
     } catch (error) {
       console.error('Error getting username:', error);
@@ -60,8 +64,50 @@ class MinusMailPopup {
     }
   }
 
+  async waitForUsernameGeneration() {
+    let attempts = 0;
+    const maxAttempts = 10; // Wait up to 5 seconds (10 * 500ms)
+    
+    const checkUsername = async () => {
+      attempts++;
+      console.log(`MinusMail Popup: Checking for username generation (attempt ${attempts})`);
+      
+      try {
+        const response = await browser.runtime.sendMessage({
+          type: 'GET_CURRENT_USERNAME'
+        });
+        
+        if (response.username) {
+          console.log('MinusMail Popup: Username generated successfully:', response.username);
+          this.username = response.username;
+          this.updateUsernameDisplay();
+          this.getUserInfo();
+          return; // Success, stop retrying
+        }
+        
+        if (attempts >= maxAttempts) {
+          console.log('MinusMail Popup: Max attempts reached, stopping username generation wait');
+          return;
+        }
+        
+        // Wait 500ms before next attempt
+        setTimeout(checkUsername, 500);
+      } catch (error) {
+        console.error('MinusMail Popup: Error checking username generation:', error);
+        if (attempts >= maxAttempts) {
+          return;
+        }
+        setTimeout(checkUsername, 500);
+      }
+    };
+    
+    // Start checking
+    setTimeout(checkUsername, 500);
+  }
+
   updateUsernameDisplay() {
     const usernameLabel = document.getElementById('current-username');
+    const emailLabel = document.getElementById('current-email');
     const usernameField = document.getElementById('username');
     
     if (usernameLabel) {
@@ -69,6 +115,14 @@ class MinusMailPopup {
         usernameLabel.textContent = this.username;
       } else {
         usernameLabel.textContent = 'Generating unique username...';
+      }
+    }
+    
+    if (emailLabel) {
+      if (this.username) {
+        emailLabel.textContent = `${this.username}@minusmail.com`;
+      } else {
+        emailLabel.textContent = 'Generating unique username...';
       }
     }
     
@@ -78,17 +132,21 @@ class MinusMailPopup {
   }
 
   async getUserInfo() {
+    console.log('MinusMail Popup: getUserInfo method called');
+    console.log('MinusMail Popup: Current username:', this.username);
+    
     if (!this.username) {
       // No username available yet, don't make API calls
-      const inboxField = document.getElementById('inbox');
-      if (inboxField) {
-        inboxField.value = 'Waiting for username...';
+      const emailBodyDisplay = document.getElementById('email-body-display');
+      console.log('MinusMail Popup: No username, email body display element:', emailBodyDisplay);
+      if (emailBodyDisplay) {
+        emailBodyDisplay.textContent = 'Waiting for username...';
       }
       return;
     }
     
     try {
-      console.log(`Fetching emails for user: ${this.username}`);
+      console.log(`MinusMail Popup: Fetching emails for user: ${this.username}`);
       const response = await fetch(`http://localhost:3005/email/username/${this.username}`, {
         method: 'GET',
         headers: {
@@ -96,30 +154,21 @@ class MinusMailPopup {
         }
       });
       
-      console.log('Response status:', response.status);
+      console.log('MinusMail Popup: Response status:', response.status);
       
       if (response.ok) {
         const data = await response.json();
-        console.log('API response:', data);
+        console.log('MinusMail Popup: API response:', data);
+        console.log('MinusMail Popup: API response keys:', Object.keys(data));
         
-        // Set the email count
-        const inboxField = document.getElementById('inbox');
-        if (inboxField && data.emailCount !== undefined) {
-          inboxField.value = `${data.emailCount} emails`;
-        } else if (inboxField) {
-          // If emailCount is not in response, try to count emails array
-          if (data.emails && Array.isArray(data.emails)) {
-            inboxField.value = `${data.emails.length} emails`;
-          } else {
-            inboxField.value = '0 emails';
-          }
-        }
+        // Display the first available email body
+        this.updateEmailBodyDisplay(data);
       } else {
-        console.error('Failed to fetch emails:', response.status);
+        console.error('MinusMail Popup: Failed to fetch emails:', response.status);
         this.setDefaultValues();
       }
     } catch (error) {
-      console.error('Error fetching emails:', error);
+      console.error('MinusMail Popup: Error fetching emails:', error);
       this.setDefaultValues();
     }
   }
@@ -127,6 +176,7 @@ class MinusMailPopup {
   setDefaultValues() {
     // Set default values if API call fails
     const usernameLabel = document.getElementById('current-username');
+    const emailLabel = document.getElementById('current-email');
     const usernameField = document.getElementById('username');
     
     if (usernameLabel) {
@@ -137,39 +187,33 @@ class MinusMailPopup {
       }
     }
     
+    if (emailLabel) {
+      if (this.username) {
+        emailLabel.textContent = `${this.username}@minusmail.com`;
+      } else {
+        emailLabel.textContent = 'Generating unique username...';
+      }
+    }
+    
     if (usernameField) {
       usernameField.value = this.username || '';
     }
     
-    const inboxField = document.getElementById('inbox');
-    if (inboxField) {
+    // Reset email body display
+    const emailBodyDisplay = document.getElementById('email-body-display');
+    if (emailBodyDisplay) {
       if (this.username) {
-        inboxField.value = '0 emails';
+        emailBodyDisplay.textContent = 'No emails available';
       } else {
-        inboxField.value = 'Waiting for username...';
+        emailBodyDisplay.textContent = 'Waiting for username...';
       }
     }
   }
 
   setupEventListeners() {
-    // Get latest code button
-    document.getElementById('get-code').addEventListener('click', () => {
-      this.getLatestCode();
-    });
-
-    // Test connection button
-    document.getElementById('test-connection').addEventListener('click', () => {
-      this.testConnection();
-    });
-
     // Save username button
     document.getElementById('save-username').addEventListener('click', () => {
       this.saveUsername();
-    });
-
-    // Generate new username button
-    document.getElementById('generate-username').addEventListener('click', () => {
-      this.generateNewUsername();
     });
 
     // Allow Enter key to save username
@@ -197,113 +241,19 @@ class MinusMailPopup {
       });
       
       if (response.success) {
+        // Update the username first
         this.username = newUsername;
         this.updateUsernameDisplay();
-        this.showMessage(`Username saved successfully: ${newUsername}`, 'success');
-        this.getUserInfo(); // Refresh user info with new username
+        this.showWelcomeMessage(newUsername);
+        
+        // Then refresh user info with the new username
+        await this.getUserInfo();
       } else {
         this.showMessage(`Error saving username: ${response.error}`, 'error');
       }
     } catch (error) {
       console.error('Error saving username:', error);
       this.showMessage('Error saving username', 'error');
-    }
-  }
-
-  async generateNewUsername() {
-    try {
-      // Generate new username via background script
-      const response = await browser.runtime.sendMessage({
-        type: 'GENERATE_USERNAME'
-      });
-      
-      if (response.success) {
-        this.username = response.username;
-        this.updateUsernameDisplay();
-        this.showMessage(`New username generated: ${response.username}`, 'success');
-        this.getUserInfo(); // Refresh user info with new username
-      } else {
-        this.showMessage(`Error generating username: ${response.error}`, 'error');
-      }
-    } catch (error) {
-      console.error('Error generating username:', error);
-      this.showMessage('Error generating username', 'error');
-    }
-  }
-
-  async getLatestCode() {
-    try {
-      const response = await browser.runtime.sendMessage({
-        type: 'REQUEST_CODE'
-      });
-      
-      if (response.error) {
-        this.showMessage(`Error: ${response.error}`, 'error');
-      } else if (response.code) {
-        this.showMessage(`Latest code: ${response.code}`, 'success');
-        
-        // Copy to clipboard if possible
-        try {
-          await navigator.clipboard.writeText(response.code);
-          this.showMessage(`Code copied to clipboard: ${response.code}`, 'success');
-        } catch (clipboardError) {
-          console.log('Clipboard not available');
-        }
-      }
-    } catch (error) {
-      console.error('Error getting latest code:', error);
-      this.showMessage('Error getting latest code', 'error');
-    }
-  }
-
-  async testConnection() {
-    try {
-      const response = await browser.runtime.sendMessage({
-        type: 'GET_STATUS'
-      });
-      
-      if (response.error) {
-        this.showMessage(`Error: ${response.error}`, 'error');
-      } else if (response.status) {
-        this.updateStatus(response.status);
-        this.showMessage(response.status.message, response.status.connected ? 'success' : 'error');
-      }
-    } catch (error) {
-      console.error('Error testing connection:', error);
-      this.showMessage('Error testing connection', 'error');
-    }
-  }
-
-  async checkStatus() {
-    try {
-      const response = await browser.runtime.sendMessage({
-        type: 'GET_STATUS'
-      });
-      
-      if (response.error) {
-        this.updateStatus({ connected: false, message: 'Error checking status' });
-      } else if (response.status) {
-        this.updateStatus(response.status);
-      }
-    } catch (error) {
-      console.error('Error checking status:', error);
-      this.updateStatus({ connected: false, message: 'Error checking status' });
-    }
-  }
-
-  updateStatus(status) {
-    const statusDot = document.querySelector('.status-dot');
-    const statusText = document.getElementById('status-text');
-    
-    // Remove existing classes
-    statusDot.classList.remove('connected', 'error', 'warning');
-    
-    if (status.connected) {
-      statusDot.classList.add('connected');
-      statusText.textContent = 'Connected to MinusMail';
-    } else {
-      statusDot.classList.add('error');
-      statusText.textContent = 'Connection failed';
     }
   }
 
@@ -317,7 +267,9 @@ class MinusMailPopup {
       setTimeout(() => {
         messageElement.style.display = 'none';
       }, 3000);
+   
     }
+
   }
 
   hideMessage() {
@@ -333,10 +285,11 @@ class MinusMailPopup {
         // Check if this is a newly generated username (not manually set)
         const isNewInstall = await browser.storage.local.get('isNewInstallation');
         if (isNewInstall.isNewInstallation) {
-          this.showWelcomeMessage(stored.username);
+ 
           // Remove the flag after showing the message
           await browser.storage.local.remove('isNewInstallation');
         }
+        this.showWelcomeMessage(stored.username);
       }
     } catch (error) {
       console.error('Error checking for new installation:', error);
@@ -347,7 +300,7 @@ class MinusMailPopup {
     const messageElement = document.getElementById('message');
     messageElement.innerHTML = `
       <div style="text-align: center; padding: 10px;">
-        <h3 style="margin: 0 0 10px 0; color: #28a745;">Welcome to MinusMail!</h3>
+        <h3 style="margin: 0 0 10px 0; color: #28a745;">MinusMail</h3>
         <p style="margin: 0 0 8px 0; font-size: 13px;">
           Your unique username is: <strong>${username}</strong>
         </p>
@@ -359,9 +312,113 @@ class MinusMailPopup {
     messageElement.className = 'message success';
     messageElement.style.display = 'block';
   }
+
+  updateEmailBodyDisplay(data) {
+    console.log('MinusMail Popup: updateEmailBodyDisplay method called');
+    
+    // Try multiple ways to find the element
+    let emailBodyDisplay = document.getElementById('email-body-display');
+    console.log('MinusMail Popup: email-body-display element (getElementById):', emailBodyDisplay);
+    
+    if (!emailBodyDisplay) {
+      // Try querySelector
+      emailBodyDisplay = document.querySelector('#email-body-display');
+      console.log('MinusMail Popup: email-body-display element (querySelector):', emailBodyDisplay);
+    }
+    
+    if (!emailBodyDisplay) {
+      // Try finding by class
+      emailBodyDisplay = document.querySelector('.email-body-content');
+      console.log('MinusMail Popup: email-body-display element (by class):', emailBodyDisplay);
+    }
+    
+    if (!emailBodyDisplay) {
+      // List all elements to see what's available
+      console.log('MinusMail Popup: All elements in document:');
+      const allElements = document.querySelectorAll('*');
+      allElements.forEach(el => {
+        if (el.id && el.id.includes('email')) {
+          console.log('MinusMail Popup: Found element with email in ID:', el.id, el);
+        }
+        if (el.className && el.className.includes('email')) {
+          console.log('MinusMail Popup: Found element with email in class:', el.className, el);
+        }
+      });
+      
+      console.log('MinusMail Popup: email-body-display element not found by any method');
+      return;
+    }
+    
+    console.log('MinusMail Popup: updateEmailBodyDisplay called with data:', data);
+    
+    // Try to get email content from htmlBody and textBody fields
+    let emailContent = '';
+    
+    if (data.htmlBody || data.textBody) {
+      if (data.htmlBody && data.textBody) {
+        emailContent = `${data.textBody}\n\n${data.htmlBody}`;
+        console.log('MinusMail Popup: Using both htmlBody and textBody from root');
+      } else if (data.htmlBody) {
+        emailContent = data.htmlBody;
+        console.log('MinusMail Popup: Using htmlBody only from root');
+      } else if (data.textBody) {
+        emailContent = data.textBody;
+        console.log('MinusMail Popup: Using textBody only from root');
+      }
+    } else if (data.emails && Array.isArray(data.emails) && data.emails.length > 0) {
+      // Check for htmlBody/textBody in the first email object
+      const firstEmail = data.emails[0];
+      console.log('MinusMail Popup: First email data:', firstEmail);
+      
+      if (firstEmail.htmlBody || firstEmail.textBody) {
+        if (firstEmail.htmlBody && firstEmail.textBody) {
+          emailContent = `${firstEmail.textBody}\n\n${firstEmail.htmlBody}`;
+          console.log('MinusMail Popup: Using both htmlBody and textBody from email object');
+        } else if (firstEmail.htmlBody) {
+          emailContent = firstEmail.htmlBody;
+          console.log('MinusMail Popup: Using htmlBody only from email object');
+        } else if (firstEmail.textBody) {
+          emailContent = firstEmail.textBody;
+          console.log('MinusMail Popup: Using textBody only from email object');
+        }
+      } else if (firstEmail.body) {
+        emailContent = firstEmail.body;
+        console.log('MinusMail Popup: Using email body from array');
+      } else if (firstEmail.content) {
+        emailContent = firstEmail.content;
+        console.log('MinusMail Popup: Using email content from array');
+      } else if (firstEmail.text) {
+        emailContent = firstEmail.text;
+        console.log('MinusMail Popup: Using email text from array');
+      } else if (firstEmail.subject) {
+        emailContent = `Subject: ${firstEmail.subject}`;
+        if (firstEmail.from) {
+          emailContent += `\nFrom: ${firstEmail.from}`;
+        }
+        console.log('MinusMail Popup: Using email subject and from from array');
+      } else if (firstEmail.from) {
+        emailContent = `From: ${firstEmail.from}`;
+        console.log('MinusMail Popup: Using email from only from array');
+      } else {
+        emailContent = 'Email content not available';
+        console.log('MinusMail Popup: No email content fields found in array');
+      }
+    } else {
+      console.log('MinusMail Popup: No htmlBody/textBody or emails array found in data');
+      emailContent = 'No emails available';
+    }
+    
+    // Truncate if too long
+    if (emailContent.length > 300) {
+      emailContent = emailContent.substring(0, 300) + '...';
+    }
+    
+    console.log('MinusMail Popup: Final email content:', emailContent);
+    emailBodyDisplay.textContent = emailContent;
+  }
 }
 
 // Initialize the popup when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
   new MinusMailPopup();
-}); 
+});

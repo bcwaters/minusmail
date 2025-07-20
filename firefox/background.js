@@ -81,12 +81,11 @@ class MinusMailBackground {
       
       // Save the unique username
       await this.saveUsername(uniqueUsername);
+      console.log('MinusMail: Username saved to storage:', uniqueUsername);
       
       // Set flag to indicate this is a new installation
       await browser.storage.local.set({ isNewInstallation: true });
-      
-      // Show a notification to the user
-      this.showInstallationNotification(uniqueUsername);
+      console.log('MinusMail: isNewInstallation flag set');
       
     } catch (error) {
       console.error('MinusMail: Error generating unique username:', error);
@@ -371,16 +370,16 @@ class MinusMailBackground {
   }
 
   notifyUsernameLoaded() {
+    console.log('MinusMail: Notifying username loaded:', this.username);
+    
     // Send notification to all content scripts and popup
     browser.runtime.sendMessage({
       type: 'USERNAME_LOADED',
       username: this.username
     }).catch(error => {
       // Ignore errors if no listeners are available
-      console.log('No listeners for username notification');
+      console.log('MinusMail: No listeners for username notification');
     });
-    
-   
   }
 
   async getStatus() {

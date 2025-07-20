@@ -19,33 +19,23 @@
         <div class="username-input-group">
           <input type="text" id="username" placeholder="Enter username">
           <button id="save-username" class="btn btn-primary">Save</button>
-          <button id="generate-username" class="btn btn-secondary">Generate New</button>
         </div>
       </div>
-      <div class="inbox-info">
-        <label for="inbox">Email Count:</label>
-        <input type="text" id="inbox" placeholder="0 emails" readonly>
+      <div class="email-info">
+
+      </div>
+      <div class="email-body-info">
+        <label for="email-body">Latest Email:</label>
+        <div id="email-body-display" class="email-body-content">
+          No emails available
+        </div>
       </div>
     </div>
 
     <img src="icons/icon-96.png" alt="MinusMail Icon" width="80" height="80" style="position: fixed; top: 5px; left: 5px; z-index: 1000;">
 
-    <div class="status-section">
-      <div id="status-indicator" class="status-indicator">
-        <span class="status-dot"></span>
-        <span id="status-text">Checking status...</span>
-      </div>
-    </div>
-
-    <div class="actions-section">
-      <button id="get-code" class="btn btn-primary">Get Latest Code</button>
-      <button id="test-connection" class="btn btn-secondary">Test Connection</button>
-    </div>
-
     <div class="info-section">
-      <p class="info-text">
-        Click on any verification code input field to automatically fill it with the latest code from MinusMail.
-      </p>
+  
     </div>
 
     <div id="message" class="message"></div>
