@@ -147,7 +147,7 @@ class MinusMailPopup {
     
     try {
       console.log(`MinusMail Popup: Fetching emails for user: ${this.username}`);
-      const response = await fetch(`http://localhost:3005/email/username/${this.username}`, {
+      const response = await fetch(`http://minusmail.com/email/username/${this.username}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'

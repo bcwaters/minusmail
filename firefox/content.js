@@ -1,5 +1,5 @@
 // Content script for MinusMail Firefox extension
-// This script runs on web pages and handles verification code and email autocomplete
+// This script runs on web pages and handles verification code autocomplete
 
 class MinusMailAutocomplete {
   constructor() {
@@ -14,9 +14,6 @@ class MinusMailAutocomplete {
       if (message.type === 'AUTOCOMPLETE_CODE') {
         this.autocompleteCode(message.code);
         sendResponse({ success: true });
-      } else if (message.type === 'AUTOCOMPLETE_EMAIL') {
-        this.autocompleteEmail();
-        sendResponse({ success: true });
       } else if (message.type === 'USERNAME_LOADED') {
         this.username = message.username;
         console.log('MinusMail: Username loaded:', this.username);
@@ -27,20 +24,11 @@ class MinusMailAutocomplete {
     // Set up mutation observer to watch for new input fields
     this.setupMutationObserver();
     
-    // Initial scan for verification code and email fields
+    // Initial scan for verification code fields
     this.scanForVerificationFields();
-    this.scanForEmailFields();
     
-    // Get username for email autocomplete
+    // Get username
     this.getUsername();
-    
-    // Add keyboard shortcut for manual email autocomplete (Ctrl+Shift+E)
-    document.addEventListener('keydown', (event) => {
-      if (event.ctrlKey && event.shiftKey && event.key === 'E') {
-        console.log('MinusMail: Manual email autocomplete triggered');
-        this.autocompleteEmail();
-      }
-    });
   }
 
   setupMutationObserver() {
@@ -50,7 +38,6 @@ class MinusMailAutocomplete {
           mutation.addedNodes.forEach((node) => {
             if (node.nodeType === Node.ELEMENT_NODE) {
               this.scanForVerificationFields(node);
-              this.scanForEmailFields(node);
             }
           });
         }
@@ -84,30 +71,6 @@ class MinusMailAutocomplete {
     });
   }
 
-  scanForEmailFields(root = document) {
-    // Look for common email input patterns
-    const selectors = [
-      'input[type="email"]',
-      'input[name*="email"]',
-      'input[name*="mail"]',
-      'input[placeholder*="email"]',
-      'input[placeholder*="mail"]',
-      'input[placeholder*="Email"]',
-      'input[placeholder*="Mail"]'
-    ];
-
-    console.log('MinusMail: Scanning for email fields in:', root);
-    
-    selectors.forEach(selector => {
-      const inputs = root.querySelectorAll(selector);
-      console.log(`MinusMail: Found ${inputs.length} inputs with selector: ${selector}`);
-      inputs.forEach(input => {
-        console.log('MinusMail: Setting up email listener for:', input);
-        this.setupEmailInputListener(input);
-      });
-    });
-  }
-
   setupVerificationInputListener(input) {
     // Add click listener to trigger code fetch
     input.addEventListener('click', () => {
@@ -117,22 +80,6 @@ class MinusMailAutocomplete {
     // Add focus listener
     input.addEventListener('focus', () => {
       this.requestCode();
-    });
-  }
-
-  setupEmailInputListener(input) {
-    console.log('MinusMail: Setting up email input listener for:', input);
-    
-    // Add click listener to trigger email autocomplete
-    input.addEventListener('click', () => {
-      console.log('MinusMail: Email input clicked');
-      this.autocompleteEmail();
-    });
-
-    // Add focus listener
-    input.addEventListener('focus', () => {
-      console.log('MinusMail: Email input focused');
-      this.autocompleteEmail();
     });
   }
 
@@ -193,53 +140,6 @@ class MinusMailAutocomplete {
     }
   }
 
-  autocompleteEmail() {
-    console.log('MinusMail: autocompleteEmail called, username:', this.username);
-    
-    if (!this.username) {
-      console.log('MinusMail: Username not available for email autocomplete');
-      this.showToast('Username not available for autocomplete', 'error');
-      return;
-    }
-
-    const emailAddress = `${this.username}@minusmail.com`;
-    console.log('MinusMail: Attempting to autocomplete with:', emailAddress);
-    
-    // Find the focused input or the most likely email input
-    let targetInput = document.activeElement;
-    console.log('MinusMail: Active element:', targetInput);
-    
-    if (!targetInput || !this.isEmailInput(targetInput)) {
-      console.log('MinusMail: Active element is not an email input, searching for email inputs...');
-      // Find the most likely email input
-      const inputs = document.querySelectorAll('input[type="email"], input[name*="email"], input[name*="mail"]');
-      console.log('MinusMail: Found email inputs:', inputs.length);
-      for (let input of inputs) {
-        if (this.isEmailInput(input)) {
-          targetInput = input;
-          console.log('MinusMail: Selected email input:', input);
-          break;
-        }
-      }
-    }
-
-    if (targetInput && this.isEmailInput(targetInput)) {
-      // Set the value and trigger input events
-      targetInput.value = emailAddress;
-      targetInput.dispatchEvent(new Event('input', { bubbles: true }));
-      targetInput.dispatchEvent(new Event('change', { bubbles: true }));
-      
-      // Focus the input
-      targetInput.focus();
-      
-      console.log('MinusMail: Autocompleted email address:', emailAddress);
-      this.showToast(`Autocompleted: ${emailAddress}`, 'success');
-    } else {
-      console.log('MinusMail: No suitable email input found for autocomplete');
-      this.showToast('No email input found for autocomplete', 'error');
-    }
-  }
-
   showToast(message, type = 'info') {
     // Create toast notification
     const toast = document.createElement('div');
@@ -284,20 +184,6 @@ class MinusMailAutocomplete {
       placeholder.includes('verification') ||
       placeholder.includes('otp') ||
       (maxLength >= 4 && maxLength <= 8)
-    );
-  }
-
-  isEmailInput(input) {
-    const type = input.type?.toLowerCase() || '';
-    const name = input.name?.toLowerCase() || '';
-    const placeholder = input.placeholder?.toLowerCase() || '';
-    
-    return (
-      type === 'email' ||
-      name.includes('email') ||
-      name.includes('mail') ||
-      placeholder.includes('email') ||
-      placeholder.includes('mail')
     );
   }
 }

@@ -81,15 +81,14 @@ Content-Type: application/json
 
 ### Visual Feedback (Recommended)
 The extension now provides visual feedback through toast notifications:
-- **Green toast**: Success (email autocompleted, code filled)
+- **Green toast**: Success (code filled)
 - **Red toast**: Error (username not available, no input found)
 - **Blue toast**: Info messages
 
 **To test:**
-1. Navigate to any website with email or verification code inputs
+1. Navigate to any website with verification code inputs
 2. Click or focus on the input field
 3. Look for toast notifications in the top-right corner of the page
-4. Use **Ctrl+Shift+E** to manually trigger email autocomplete
 
 ### Console Logs
 

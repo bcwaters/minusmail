@@ -1,12 +1,11 @@
 # MinusMail Firefox Extension
 
-A Firefox extension that provides autocomplete functionality for verification codes and email addresses using the MinusMail API.
+A Firefox extension that provides autocomplete functionality for verification codes using the MinusMail API.
 
 ## Features
 
 - **Automatic Username Generation**: Each user gets a unique username upon installation
 - **Username Customization**: Users can update their username anytime through the popup
-- **Email Autocomplete**: Automatically fills email fields with `username@minusmail.com`
 - **Verification Code Autocomplete**: Automatically fills verification code fields
 - **Real-time Status**: Shows connection status to MinusMail API
 - **Manual Code Retrieval**: Get latest verification codes manually
@@ -39,10 +38,6 @@ The extension generates unique usernames using three different strategies:
 Each username includes a random number to ensure uniqueness.
 
 ## Usage
-
-### Email Autocomplete
-- Click on any email input field
-- The extension will automatically fill it with `yourusername@minusmail.com`
 
 ### Verification Code Autocomplete
 - Click on any verification code input field
