@@ -6,6 +6,7 @@
   "permissions": [
     "activeTab",
     "storage",
+    "notifications",
     "https://api.minusmail.com/*"
   ],
   "content_scripts": [

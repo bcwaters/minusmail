@@ -11,14 +11,19 @@ class MinusMailPopup {
     // Load initial state
     this.checkStatus();
     
-    // Get username from background script
-    this.getUsername();
+    // Get username from background script (with small delay to allow installation to complete)
+    setTimeout(() => {
+      this.getUsername();
+    }, 100);
     
     // Set up event listeners
     this.setupEventListeners();
     
     // Listen for username loaded notifications
     this.setupMessageListener();
+    
+    // Check if this is a new installation
+    this.checkForNewInstallation();
   }
 
   setupMessageListener() {
@@ -43,29 +48,42 @@ class MinusMailPopup {
         this.updateUsernameDisplay();
         this.getUserInfo(); // Get user info with the username
       } else {
-        // Fallback if username not loaded yet
-        this.username = 'user';
+        // No username available yet (fresh installation)
+        this.username = null;
         this.updateUsernameDisplay();
-        this.getUserInfo();
+        // Don't call getUserInfo() until we have a username
       }
     } catch (error) {
       console.error('Error getting username:', error);
-      this.username = 'user';
+      this.username = null;
       this.updateUsernameDisplay();
-      this.getUserInfo();
     }
   }
 
   updateUsernameDisplay() {
+    const usernameLabel = document.getElementById('current-username');
     const usernameField = document.getElementById('username');
+    
+    if (usernameLabel) {
+      if (this.username) {
+        usernameLabel.textContent = this.username;
+      } else {
+        usernameLabel.textContent = 'Generating unique username...';
+      }
+    }
+    
     if (usernameField) {
-      usernameField.value = this.username || 'Not available';
+      usernameField.value = this.username || '';
     }
   }
 
   async getUserInfo() {
     if (!this.username) {
-      this.setDefaultValues();
+      // No username available yet, don't make API calls
+      const inboxField = document.getElementById('inbox');
+      if (inboxField) {
+        inboxField.value = 'Waiting for username...';
+      }
       return;
     }
     
@@ -108,14 +126,28 @@ class MinusMailPopup {
 
   setDefaultValues() {
     // Set default values if API call fails
+    const usernameLabel = document.getElementById('current-username');
     const usernameField = document.getElementById('username');
+    
+    if (usernameLabel) {
+      if (this.username) {
+        usernameLabel.textContent = this.username;
+      } else {
+        usernameLabel.textContent = 'Generating unique username...';
+      }
+    }
+    
     if (usernameField) {
-      usernameField.value = this.username || 'Not available';
+      usernameField.value = this.username || '';
     }
     
     const inboxField = document.getElementById('inbox');
     if (inboxField) {
-      inboxField.value = '0 emails';
+      if (this.username) {
+        inboxField.value = '0 emails';
+      } else {
+        inboxField.value = 'Waiting for username...';
+      }
     }
   }
 
@@ -129,6 +161,74 @@ class MinusMailPopup {
     document.getElementById('test-connection').addEventListener('click', () => {
       this.testConnection();
     });
+
+    // Save username button
+    document.getElementById('save-username').addEventListener('click', () => {
+      this.saveUsername();
+    });
+
+    // Generate new username button
+    document.getElementById('generate-username').addEventListener('click', () => {
+      this.generateNewUsername();
+    });
+
+    // Allow Enter key to save username
+    document.getElementById('username').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        this.saveUsername();
+      }
+    });
+  }
+
+  async saveUsername() {
+    const usernameField = document.getElementById('username');
+    const newUsername = usernameField.value.trim();
+    
+    if (!newUsername) {
+      this.showMessage('Please enter a username', 'error');
+      return;
+    }
+    
+    try {
+      // Save username to storage via background script
+      const response = await browser.runtime.sendMessage({
+        type: 'SAVE_USERNAME',
+        username: newUsername
+      });
+      
+      if (response.success) {
+        this.username = newUsername;
+        this.updateUsernameDisplay();
+        this.showMessage(`Username saved successfully: ${newUsername}`, 'success');
+        this.getUserInfo(); // Refresh user info with new username
+      } else {
+        this.showMessage(`Error saving username: ${response.error}`, 'error');
+      }
+    } catch (error) {
+      console.error('Error saving username:', error);
+      this.showMessage('Error saving username', 'error');
+    }
+  }
+
+  async generateNewUsername() {
+    try {
+      // Generate new username via background script
+      const response = await browser.runtime.sendMessage({
+        type: 'GENERATE_USERNAME'
+      });
+      
+      if (response.success) {
+        this.username = response.username;
+        this.updateUsernameDisplay();
+        this.showMessage(`New username generated: ${response.username}`, 'success');
+        this.getUserInfo(); // Refresh user info with new username
+      } else {
+        this.showMessage(`Error generating username: ${response.error}`, 'error');
+      }
+    } catch (error) {
+      console.error('Error generating username:', error);
+      this.showMessage('Error generating username', 'error');
+    }
   }
 
   async getLatestCode() {
@@ -223,6 +323,41 @@ class MinusMailPopup {
   hideMessage() {
     const messageElement = document.getElementById('message');
     messageElement.style.display = 'none';
+  }
+
+  async checkForNewInstallation() {
+    try {
+      // Check if we have a username stored
+      const stored = await browser.storage.local.get('username');
+      if (stored.username) {
+        // Check if this is a newly generated username (not manually set)
+        const isNewInstall = await browser.storage.local.get('isNewInstallation');
+        if (isNewInstall.isNewInstallation) {
+          this.showWelcomeMessage(stored.username);
+          // Remove the flag after showing the message
+          await browser.storage.local.remove('isNewInstallation');
+        }
+      }
+    } catch (error) {
+      console.error('Error checking for new installation:', error);
+    }
+  }
+
+  showWelcomeMessage(username) {
+    const messageElement = document.getElementById('message');
+    messageElement.innerHTML = `
+      <div style="text-align: center; padding: 10px;">
+        <h3 style="margin: 0 0 10px 0; color: #28a745;">Welcome to MinusMail!</h3>
+        <p style="margin: 0 0 8px 0; font-size: 13px;">
+          Your unique username is: <strong>${username}</strong>
+        </p>
+        <p style="margin: 0; font-size: 12px; color: #6c757d;">
+          You can change it anytime using the field above.
+        </p>
+      </div>
+    `;
+    messageElement.className = 'message success';
+    messageElement.style.display = 'block';
   }
 }
 

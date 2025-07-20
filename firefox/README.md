@@ -1,32 +1,62 @@
 # MinusMail Firefox Extension
 
-A Firefox browser extension that automatically fills verification codes from the MinusMail API into web forms.
-No need to expose or manage your own email address
+A Firefox extension that provides autocomplete functionality for verification codes and email addresses using the MinusMail API.
 
 ## Features
 
-- **Automatic Code Detection**: Detects verification code input fields on web pages
-- **One-Click Filling**: Click on any verification code field to auto-fill with the latest code
-- **API Integration**: Connects to MinusMail API to retrieve verification codes
-- **Secure Storage**: Safely stores your API key locally
-- **Status Monitoring**: Real-time connection status and error reporting
+- **Automatic Username Generation**: Each user gets a unique username upon installation
+- **Username Customization**: Users can update their username anytime through the popup
+- **Email Autocomplete**: Automatically fills email fields with `username@minusmail.com`
+- **Verification Code Autocomplete**: Automatically fills verification code fields
+- **Real-time Status**: Shows connection status to MinusMail API
+- **Manual Code Retrieval**: Get latest verification codes manually
 
-## Quick Start
+## Installation
 
-1. **Load the Extension**:
-   - Open Firefox and go to `about:debugging`
-   - Click "This Firefox" → "Load Temporary Add-on..."
-   - Select the `manifest.json` file from this directory
+1. Download the extension files
+2. Open Firefox and navigate to `about:debugging`
+3. Click "This Firefox" tab
+4. Click "Load Temporary Add-on"
+5. Select the `manifest.json` file
 
+## First-Time Setup
 
-3. **Start Using**:
-   - Navigate to any website with verification code fields
-   - Click on the verification code input field
-   - The code will be automatically filled
+When you first install the extension:
+
+1. A unique username will be automatically generated (e.g., `swift_fox123`, `blue_cat456`)
+2. You'll receive a browser notification with your username
+3. The popup will show a welcome message with your username
+4. You can change your username anytime using the popup interface
+
+## Username Generation
+
+The extension generates unique usernames using three different strategies:
+
+1. **Random**: `user_XXXXXX` format with random alphanumeric characters
+2. **Adjective + Noun**: `swift_fox123`, `brave_lion456` format
+3. **Color + Animal**: `blue_cat789`, `red_dragon321` format
+
+Each username includes a random number to ensure uniqueness.
+
+## Usage
+
+### Email Autocomplete
+- Click on any email input field
+- The extension will automatically fill it with `yourusername@minusmail.com`
+
+### Verification Code Autocomplete
+- Click on any verification code input field
+- The extension will automatically fill it with the latest code from MinusMail
+
+### Manual Operations
+- Use the popup to test API connection
+- Manually retrieve verification codes
+- Update your username
+- Generate a new unique username
 
 ## Development
 
-See [DEVELOPMENT.md](./DEVELOPMENT.md) for detailed development instructions.
+See `DEVELOPMENT.md` for development setup and testing instructions.
 
 ## Files
 

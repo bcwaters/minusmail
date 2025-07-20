@@ -15,8 +15,12 @@
 
     <div class="user-section">
       <div class="user-info">
-        <label for="username">Current Username:</label>
-        <input type="text" id="username" placeholder="Enter username" readonly>
+        <label for="username">Current Username:</label> <label for="current-username"></label>
+        <div class="username-input-group">
+          <input type="text" id="username" placeholder="Enter username">
+          <button id="save-username" class="btn btn-primary">Save</button>
+          <button id="generate-username" class="btn btn-secondary">Generate New</button>
+        </div>
       </div>
       <div class="inbox-info">
         <label for="inbox">Email Count:</label>
