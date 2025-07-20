@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import type { EmailData } from '../services/ApiService';
 import styles from './Inbox.module.css';
 
@@ -11,11 +12,41 @@ interface InboxProps {
 
 const Inbox: React.FC<InboxProps> = ({ emailList, isLoading, emailData, handleEmailSelect }) => {
   const [now, setNow] = useState(Date.now());
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [hostnameFilter, setHostnameFilter] = useState('');
+
+  // Initialize filter from URL query parameter
+  useEffect(() => {
+    const filterParam = searchParams.get('filter');
+    if (filterParam) {
+      setHostnameFilter(filterParam);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const interval = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(interval);
   }, []);
+
+  // Update URL when filter changes
+  const updateFilter = (newFilter: string) => {
+    setHostnameFilter(newFilter);
+    
+    if (newFilter.trim()) {
+      setSearchParams({ filter: newFilter });
+    } else {
+      setSearchParams({});
+    }
+  };
+
+  // Filter emails by hostname
+  const filteredEmails = emailList.filter(email => {
+    if (!hostnameFilter.trim()) return true;
+    
+    const fromEmail = email.from || '';
+    const hostname = fromEmail.split('@')[1]?.toLowerCase() || '';
+    return hostname.includes(hostnameFilter.toLowerCase());
+  });
 
   const handleDownload = (email: EmailData) => {
     const html = `<!DOCTYPE html>
@@ -56,14 +87,39 @@ const Inbox: React.FC<InboxProps> = ({ emailList, isLoading, emailData, handleEm
 
   return (
     <div className={styles.inboxContainer}>
-      <h3 className={styles.inboxTitle}>📬 Inbox ({emailList.length})</h3>
+      <h3 className={styles.inboxTitle}>📬 Inbox ({filteredEmails.length}/{emailList.length})</h3>
+      
+      {/* Filter Section */}
+      <div className={styles.filterSection}>
+        <div className={styles.filterInputContainer}>
+          <input
+            type="text"
+            placeholder="Filter (e.g. gmail for admin@gmail.com)"
+            value={hostnameFilter}
+            onChange={(e) => updateFilter(e.target.value)}
+            className={styles.filterInput}
+          />
+          {hostnameFilter && (
+            <button
+              onClick={() => updateFilter('')}
+              className={styles.clearFilterButton}
+              title="Clear filter"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+      </div>
+
       {isLoading ? (
         <div>Loading emails...</div>
-      ) : emailList.length === 0 ? (
-        <div>No emails yet</div>
+      ) : filteredEmails.length === 0 ? (
+        <div>
+          {emailList.length === 0 ? 'No emails yet' : `No emails match "${hostnameFilter}"`}
+        </div>
       ) : (
         <div className={styles.emailList}>
-          {emailList.map((email, index) => (
+          {filteredEmails.map((email, index) => (
             <div
               key={index}
               onClick={() => handleEmailSelect(email)}
@@ -83,7 +139,7 @@ const Inbox: React.FC<InboxProps> = ({ emailList, isLoading, emailData, handleEm
                 {new Date(email.received).toLocaleString()}
                 {(() => {
                   const received = new Date(email.received);
-                  const expires = new Date(received.getTime() + 10 * 60 * 1000);
+                  const expires = new Date(received.getTime() + 15 * 60 * 1000);
                   const msLeft = expires.getTime() - now;
                   if (msLeft <= 0) return ' (expired)';
                   const min = Math.floor(msLeft / 60000);

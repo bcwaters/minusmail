@@ -1,69 +1,153 @@
-# React + TypeScript + Vite
+# MinusMail Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React-based frontend for the MinusMail ephemeral email service. This application provides a real-time email inbox interface with advanced filtering and routing capabilities.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Real-time Email Delivery**: Receive emails instantly via WebSocket connection
+- **URL-based Routing**: Access different inboxes via URL parameters
+- **Hostname Filtering**: Filter emails by sender domain with query parameters
+- **Ephemeral Storage**: Emails automatically expire after 15 minutes
+- **Email Download**: Download emails as HTML files
+- **Responsive Design**: Modern UI with clean, intuitive interface
 
-## Expanding the ESLint configuration
+## Routing
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The application supports URL-based routing to access different email inboxes and apply filters.
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Basic Routing
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- **`/`** - Default inbox (uses fallback email address)
+- **`/:username`** - Inbox for specific username
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Examples
+
+```
+http://localhost:5173/           # Default inbox
+http://localhost:5173/test       # Inbox for "test" username
+http://localhost:5173/john       # Inbox for "john" username
+http://localhost:5173/admin      # Inbox for "admin" username
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Filtering with Query Parameters
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+You can filter emails by sender hostname using the `filter` query parameter:
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **`?filter=hostname`** - Filter emails by sender domain
+
+### Filter Examples
+
 ```
+http://localhost:5173/test?filter=facebook    # Only Facebook emails for "test"
+http://localhost:5173/john?filter=google      # Only Google emails for "john"
+http://localhost:5173/admin?filter=github     # Only GitHub emails for "admin"
+http://localhost:5173/user?filter=gmail       # Only Gmail emails for "user"
+```
+
+### URL Synchronization
+
+- The URL updates automatically as you type in the filter input
+- Filter state persists across page refreshes
+- Shareable URLs for specific filtered views
+- Clear filter removes the query parameter from the URL
+
+## Email Filtering
+
+### Filter Input
+- Type any part of a hostname to filter emails
+- Case-insensitive matching
+- Real-time filtering as you type
+- Clear button (✕) to reset filter
+
+### Filter Logic
+- Extracts hostname from sender email (everything after @)
+- Partial matching (typing "face" matches "facebook.com")
+- Updates inbox count to show filtered vs total emails
+
+## Development
+
+### Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn
+
+### Installation
+
+```bash
+cd minus-mail-frontend
+npm install
+```
+
+### Development Server
+
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:5173`
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+### Linting
+
+```bash
+npm run lint
+```
+
+## Project Structure
+
+```
+src/
+├── components/          # React components
+│   ├── AppBanner.tsx   # Top banner with email controls
+│   ├── CurrentAddress.tsx # Current email address display
+│   ├── EmailDisplay.tsx # Email content viewer
+│   ├── EmailInput.tsx  # Email address input
+│   ├── Inbox.tsx       # Email list with filtering
+│   └── ...
+├── services/           # API and WebSocket services
+│   ├── ApiService.ts   # REST API client
+│   └── SocketService.ts # WebSocket client
+├── config/            # Configuration files
+└── App.tsx           # Main application component
+```
+
+## API Integration
+
+The frontend connects to the MinusMail backend API for:
+- Fetching email lists
+- Real-time email delivery via WebSocket
+- Email management operations
+
+### WebSocket Events
+- `newEmail` - Receives new email data in real-time
+- Automatic reconnection on connection loss
+
+## Styling
+
+The application uses CSS modules for component-specific styling:
+- Consistent color scheme with orange accent (#FBA43F)
+- Responsive design for different screen sizes
+- Hover effects and smooth transitions
+- Clean, modern interface design
+
+## Browser Support
+
+- Modern browsers with ES6+ support
+- WebSocket support required for real-time features
+- Local storage for user preferences
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## License
+
+This project is part of the MinusMail ephemeral email service.
