@@ -20,7 +20,7 @@ const VerificationCodeDisplay: React.FC<VerificationCodeDisplayProps> = ({ code,
     <div className={styles.container}>
       <div className={styles.header}>
 
-        <span className={styles.title}>Verification Code Detected!</span>
+        <span className={styles.title}>Possible Verification Code Detected!</span>
       </div>
       <div className={styles.codeContainer}>
         <span className={styles.code}>{code}</span>

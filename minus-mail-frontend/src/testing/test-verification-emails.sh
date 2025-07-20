@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Test script to send 8 emails with verification codes in HTML body
+# Test script to send 9 emails with verification codes in HTML body
 # Usage: ./test-verification-emails.sh [email_address]
 
 EMAIL_ADDRESS=${1:-"test@minusmail.com"}
@@ -54,8 +54,14 @@ sleep 0.1
 echo "Sending Email 8: No subject line..."
 echo -e "From: noreply@testservice.com\nTo: $EMAIL_ADDRESS\nContent-Type: text/html\n\n<html><body><p>Your verification code: <strong>987654</strong></p><p>Please use this code to complete your verification.</p></body></html>" | sendmail $EMAIL_ADDRESS
 
+sleep 0.1
+
+# Email 9: WhisperAI false positive test case (should return null)
+echo "Sending Email 9: WhisperAI false positive test..."
+echo -e "From: whisperai@mail.beehiiv.com\nTo: $EMAIL_ADDRESS\nSubject: Welcome to WhisperAI\nContent-Type: text/html\n\n<html><body><p>Welcome to WhisperAI!</p><p>This email contains CSS color codes like #121216, #595959, #697882 that should NOT be extracted as verification codes.</p><p>There is no actual verification code in this email.</p></body></html>" | sendmail $EMAIL_ADDRESS
+
 echo ""
-echo "✅ All 8 test emails sent successfully!"
+echo "✅ All 9 test emails sent successfully!"
 echo ""
 echo "Expected verification codes:"
 echo "1. 123456 (simple numeric)"
@@ -66,5 +72,6 @@ echo "5. NQWGBH (Twilio verification code)"
 echo "6. 819746 (Canvas verification code)"
 echo "7. 217438 (X verification code)"
 echo "8. 987654 (no subject line)"
+echo "9. null (WhisperAI false positive - should NOT extract CSS color codes)"
 echo ""
 echo "Check your MinusMail inbox to see the verification code extraction in action!" 
