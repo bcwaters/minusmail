@@ -17,7 +17,7 @@ function EmailApp() {
   const { username } = useParams<{ username: string }>()
   const navigate = useNavigate()
   
-  const [emailAddress, setEmailAddress] = useState(username || 'update_to_another_email')
+  const [emailAddress, setEmailAddress] = useState(username || 'default')
   const [emailData, setEmailData] = useState<EmailData | null>(null)
   const [emailList, setEmailList] = useState<EmailData[]>([])
   const [isLoading, setIsLoading] = useState(false)

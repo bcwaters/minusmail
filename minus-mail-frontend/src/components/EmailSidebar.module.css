@@ -27,7 +27,13 @@
 }
 
 .update-section {
-  margin-top: 16px;
+  margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+  .update-section {
+    margin-top: 0;
+  }
 }
 
 .input-group {
