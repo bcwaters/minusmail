@@ -29,16 +29,6 @@ const Inbox: React.FC<InboxProps> = ({ emailList, isLoading, emailData, handleEm
     return () => clearInterval(interval);
   }, []);
 
-  // Update URL when filter changes
-  const updateFilter = (newFilter: string) => {
-    setHostnameFilter(newFilter);
-    
-    if (newFilter.trim()) {
-      setSearchParams({ filter: newFilter });
-    } else {
-      setSearchParams({});
-    }
-  };
 
   // Filter emails by hostname
   const filteredEmails = emailList.filter(email => {
