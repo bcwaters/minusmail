@@ -72,7 +72,9 @@ let RedisService = RedisService_1 = class RedisService {
         }
         try {
             const data = await this.redisClient.get(emailId);
-            return data ? JSON.parse(data.toString()) : null;
+            const emailData = data ? JSON.parse(data.toString()) : null;
+            emailData.id = emailId;
+            return emailData;
         }
         catch (error) {
             this.logger.error(`Failed to get email ${emailId}:`, error);

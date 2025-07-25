@@ -74,6 +74,7 @@ let EmailGateway = class EmailGateway {
             else {
                 console.log('[GATEWAY] No emails found, sending welcome to:', emailId);
                 const welcomeEmail = {
+                    id: emailId,
                     from: 'system@minusmail.com',
                     subject: 'Welcome to MinusMail',
                     htmlBody: '<p>Welcome to your temporary email inbox! Any emails sent to <b>' + emailId + '@minusmail.com</b> will appear here.</p>',
@@ -86,6 +87,7 @@ let EmailGateway = class EmailGateway {
         catch (error) {
             console.error('[GATEWAY] Error in join handler:', error);
             const fallbackEmail = {
+                id: emailId,
                 from: 'system@minusmail.com',
                 subject: 'Welcome to MinusMail',
                 htmlBody: '<p>Welcome to your temporary email inbox! Any emails sent to <b>' + emailId + '@minusmail.com</b> will appear here.</p>',

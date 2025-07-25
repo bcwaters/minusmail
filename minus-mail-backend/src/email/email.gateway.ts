@@ -95,6 +95,7 @@ export class EmailGateway implements OnGatewayConnection, OnGatewayDisconnect, O
         console.log('[GATEWAY] No emails found, sending welcome to:', emailId);
         // Send welcome message for new email addresses
         const welcomeEmail = {
+          id: emailId,
           from: 'system@minusmail.com',
           subject: 'Welcome to MinusMail',
           htmlBody: '<p>Welcome to your temporary email inbox! Any emails sent to <b>' + emailId + '@minusmail.com</b> will appear here.</p>',
@@ -107,6 +108,7 @@ export class EmailGateway implements OnGatewayConnection, OnGatewayDisconnect, O
       console.error('[GATEWAY] Error in join handler:', error);
       // Send a fallback email if service fails
       const fallbackEmail = {
+        id: emailId,
         from: 'system@minusmail.com',
         subject: 'Welcome to MinusMail',
         htmlBody: '<p>Welcome to your temporary email inbox! Any emails sent to <b>' + emailId + '@minusmail.com</b> will appear here.</p>',
