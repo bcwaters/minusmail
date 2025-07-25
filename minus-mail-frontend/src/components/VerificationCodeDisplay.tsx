@@ -12,7 +12,7 @@ const VerificationCodeDisplay: React.FC<VerificationCodeDisplayProps> = ({ code,
       await navigator.clipboard.writeText(code);
       onCopy?.();
     } catch (err) {
-      console.error('Failed to copy code:', err);
+      // console.error('Failed to copy code:', err);
     }
   };
 

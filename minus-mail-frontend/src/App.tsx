@@ -32,18 +32,18 @@ function EmailApp() {
     
       onNewEmail: (emailData: EmailData) => {
         
-        console.log('[FRONTEND] New email received:', emailData);
+        // console.log('[FRONTEND] New email received:', emailData);
         // Only add new email to the list, do not update the viewer
         setEmailList(prev => {
-          console.log('[FRONTEND] Updating email list, current count:', prev.length);
+          // console.log('[FRONTEND] Updating email list, current count:', prev.length);
           //check if the email is already in the list
           const isEmailInList = prev.some(email => emailData.id === email.id);
           if (isEmailInList) {
-            console.log('[FRONTEND] Email already in list, skipping');
+            // console.log('[FRONTEND] Email already in list, skipping');
             return prev;
           }
           const newList = [emailData, ...prev];
-          console.log('[FRONTEND] New email list count:', newList.length);
+          // console.log('[FRONTEND] New email list count:', newList.length);
           return newList;
         });
       }

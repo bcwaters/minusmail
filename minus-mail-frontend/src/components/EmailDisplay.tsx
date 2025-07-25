@@ -13,7 +13,7 @@ function EmailDisplay({ email }: EmailDisplayProps) {
   const [verificationCode, setVerificationCode] = useState<string | null>(null);
   const [showCopyFeedback, setShowCopyFeedback] = useState(false);
 
-  console.log('EmailDisplay', email);
+  // console.log('EmailDisplay', email);
   
   // Extract verification code when email changes
   useEffect(() => {
