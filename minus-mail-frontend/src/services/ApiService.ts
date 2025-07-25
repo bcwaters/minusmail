@@ -4,6 +4,7 @@ import { config } from '../config/environment';
 const API_BASE_URL = `${config.apiBaseUrl}/email`;
 
 export interface EmailData {
+  id: string;
   from: string;
   subject: string;
   htmlBody: string;
