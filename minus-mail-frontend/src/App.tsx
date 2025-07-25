@@ -7,8 +7,6 @@ import AppBanner from './components/AppBanner'
 import { socketService } from './services/SocketService'
 import { apiService, type EmailData } from './services/ApiService'
 import Inbox from './components/Inbox'
-import CurrentAddress from './components/CurrentAddress'
-import EmailInput from './components/EmailInput'
 
 // Component that handles the email functionality with routing
 function EmailApp() {
@@ -90,16 +88,13 @@ function EmailApp() {
 
         <div className="email-container">
         <div className="email-sidebar">
-        <div className="email-nav-bar">
-          <CurrentAddress currentAddress={emailAddress} /> 
-        </div>
-        <EmailInput currentEmail={emailAddress} onEmailUpdate={handleEmailUpdate} />
-        
+
           <Inbox 
             emailList={emailList}
             isLoading={isLoading}
             emailData={emailData}
             handleEmailSelect={handleEmailSelect}
+            userEmail={emailAddress}
           />
         </div>
         <div className="email-display">

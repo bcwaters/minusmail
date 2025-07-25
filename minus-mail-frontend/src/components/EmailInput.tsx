@@ -75,7 +75,7 @@ function EmailInput({ currentEmail, onEmailUpdate }: EmailInputProps) {
 
   return (
     <div className={styles['update-section']}>
-      <div className={styles['domain-suffix']}>{inputValue || 'username'}@minusmail.com</div>
+      <div className={styles['domain-suffix']}>Current Address: {currentEmail || 'username'}@minusmail.com</div>
       <div className={styles['input-group']}>
         <div className={styles['input-wrapper']}>
           <input

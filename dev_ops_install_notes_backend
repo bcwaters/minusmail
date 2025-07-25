@@ -9,3 +9,20 @@ npm install ioredis
 sudo apt install redis-server
 sudo systemctl start redis
 sudo systemctl enable 
+
+The service is running on PM2
+1884  cat /home/ubuntu/.pm2/pids/minusmail-backend-0.pid   
+ 1885  cd /home/ubuntu/.pm2/
+ 1886  ls
+ 1887  cd pids/
+ 1888  ls
+ 1889  pm2 list
+ 1890  pgrep -fl node
+ 1891  pm2 delete 0 
+ 1892  pm2 delete 1 
+ 1893  cd ..
+ 1894  cd minusmail/minus-mail-backend/
+ 1895  pm2 start dist/main.js --name minusmail-backend
+ 1896  pm2 show
+ 1897  pm2 list
+ 1898  pm2 show 0

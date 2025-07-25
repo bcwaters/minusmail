@@ -1,9 +1,21 @@
 .inboxContainer {
-  margin-top: 20px;
+
   padding: 10px;
   border: 1px solid #FBA43F;
-  border-radius: 18px;
+  border-radius: 8px;
   background: #fff;
+  font-family: 'Georgia, Times New Roman, serif';
+}
+
+.inboxTitleLabel {
+  margin: 0 0 10px 0;
+
+  font-size: 1rem;
+  color: #555;
+  font-weight: 600;
+  font-family: 'Georgia, Times New Roman, serif';
+  text-align: center;
+  border-bottom: 1.5px solid #ccc;
 }
 
 .inboxTitle {

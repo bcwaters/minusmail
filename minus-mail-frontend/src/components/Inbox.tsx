@@ -5,12 +5,13 @@ import styles from './Inbox.module.css';
 
 interface InboxProps {
   emailList: EmailData[];
+  userEmail: string;
   isLoading: boolean;
   emailData: EmailData | null;
   handleEmailSelect: (email: EmailData) => void;
 }
 
-const Inbox: React.FC<InboxProps> = ({ emailList, isLoading, emailData, handleEmailSelect }) => {
+const Inbox: React.FC<InboxProps> = ({ emailList, isLoading, emailData, handleEmailSelect, userEmail }) => {
   const [now, setNow] = useState(Date.now());
   const [searchParams, setSearchParams] = useSearchParams();
   const [hostnameFilter, setHostnameFilter] = useState('');
@@ -87,7 +88,8 @@ const Inbox: React.FC<InboxProps> = ({ emailList, isLoading, emailData, handleEm
 
   return (
     <div className={styles.inboxContainer}>
-      <h3 className={styles.inboxTitle}>📬 Inbox ({filteredEmails.length}/{emailList.length})</h3>
+       <h4 className={styles.inboxTitleLabel}>{userEmail}@minusmail.com</h4>
+      <h3 className={styles.inboxTitle}>Inbox ({filteredEmails.length}/{emailList.length})</h3>
       
       {/* Filter Section */}
       <div className={styles.filterSection}>
