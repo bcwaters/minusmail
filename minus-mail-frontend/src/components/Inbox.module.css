@@ -1,8 +1,9 @@
 .inboxContainer {
 
   padding: 10px;
+  height: 100%;
   border: 1px solid #FBA43F;
-  border-radius: 8px;
+  border-radius: 1px;
   background: #fff;
   font-family: 'Georgia, Times New Roman, serif';
 }
@@ -10,7 +11,7 @@
 .inboxTitleLabel {
   margin: 0 0 10px 0;
 
-  font-size: 1rem;
+  font-size: .9rem;
   color: #555;
   font-weight: 600;
   font-family: 'Georgia, Times New Roman, serif';

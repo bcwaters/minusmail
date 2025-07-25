@@ -40,10 +40,7 @@ function AppBanner(_props: AppBannerProps) {
         justifyContent: 'center',
         width: '100%',
         flexDirection: 'column',
-        marginLeft: '-20px',
-        marginRight: '-20px',
-        marginTop: '-20px',
-        marginBottom: '5px',
+
         // For mobile, override with -5px if needed
         ...(window.innerWidth <= 600 ? { marginLeft: '-5px', marginRight: '-5px', marginTop: '-5px', marginBottom: '15px' } : {})
       }}>

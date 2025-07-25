@@ -6,13 +6,12 @@
   color: #666;
   font-size: 16px;
   background: #fff;
-  border-radius: 8px;
+  border-radius: 0px;
   border: 1px solid #ddd;
 }
 
 .email-container {
-  max-width: 800px;
-  margin: 0 auto;
+
   background: #fff;
   border-radius: 0px;
 

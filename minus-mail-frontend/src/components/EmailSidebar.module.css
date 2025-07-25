@@ -27,7 +27,13 @@
 }
 
 .update-section {
-  margin-top: 10px;
+  background: #fba43f;
+  border: solid 1px #fba43f;
+  border-radius: 4px;
+  padding:3px;
+  margin-top: auto;
+  margin-bottom: auto;
+
 }
 
 @media (max-width: 600px) {
@@ -38,8 +44,7 @@
 
 .input-group {
   display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
+
   position: relative;
 }
 
@@ -53,7 +58,11 @@ input {
   width: 100%;
   padding: 8px 12px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 0px;
+
   font-size: 14px;
   outline: none;
   background: #fff;
@@ -85,19 +94,26 @@ input:focus {
 }
 
 .domain-suffix {
+  padding: 4px;
+  width: 300px;
+  background: #fba43f;
   color: #666;
   font-size: 12px;
-  margin-top: 4px;
-  margin-left: 2px;
+
+  padding-bottom: 4px;
+ 
   text-align: left;
 }
 
 button {
   padding: 8px 12px;
-  background: #7aaf5b;
+  background: #e85c00;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 0px;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 0px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
@@ -108,7 +124,7 @@ button {
 
 button:hover {
   color: #555;
-  background: #7baf5D;
+  background: #e89600;
 }
 
 button:disabled {
