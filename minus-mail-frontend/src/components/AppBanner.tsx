@@ -87,12 +87,12 @@ function AppBanner(_props: AppBannerProps) {
             />MinusMail</h1>
               <h2 style={{
                 color: '#000',
-                fontSize: '1rem',
+                fontSize: '.9rem',
                 fontWeight: '800',
                 margin: '0 0 0 0',
                 textAlign: 'left',
                 fontFamily: '"Libre Baskerville", Georgia, serif'
-              }}>Instantly MinusMail email address</h2>
+              }}>Instantly check any MinusMail email</h2>
             </div>
           </div>
         
