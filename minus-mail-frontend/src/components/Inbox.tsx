@@ -91,8 +91,8 @@ const Inbox: React.FC<InboxProps> = ({ emailList, isLoading, emailData, handleEm
        <h4 className={styles.inboxTitleLabel}>{userEmail}@minusmail.com</h4>
       <h3 className={styles.inboxTitle}>Inbox ({filteredEmails.length}/{emailList.length})</h3>
       
-      {/* Filter Section */}
-      <div className={styles.filterSection}>
+      {/* Filter Section 
+            <div className={styles.filterSection}>
         <div className={styles.filterInputContainer}>
           <input
             type="text"
@@ -112,6 +112,7 @@ const Inbox: React.FC<InboxProps> = ({ emailList, isLoading, emailData, handleEm
           )}
         </div>
       </div>
+*/}
 
       {isLoading ? (
         <div>Loading emails...</div>

@@ -1,5 +1,5 @@
 import type { EmailData } from '../services/ApiService';
-import minusMailBannerImage from '../assets/minusMailBannerImage.png';
+import minusMailBannerImage from '../assets/minusmail_icon_2.png';
 import EmailInput from './EmailInput';
 import styles from './AppBanner.module.css';
 import { useNavigate } from 'react-router-dom';
@@ -59,15 +59,7 @@ function AppBanner(_props: AppBannerProps) {
             alignItems: 'center',
             gap: '20px'
           }}>
-            <img 
-              src={minusMailBannerImage} 
-              alt="MinusMail Banner" 
-              style={{
-                height: '80px',
-                width: 'auto',
-                objectFit: 'contain'
-              }}
-            />
+
             <div style={{
               display: 'flex',
               flexDirection: 'column',
@@ -80,16 +72,27 @@ function AppBanner(_props: AppBannerProps) {
                 letterSpacing: '3px',
                 margin: '0',
                 fontFamily: 'Georgia, Times New Roman, serif',
-                textTransform: 'uppercase'
-              }}>MinusMail</h1>
+                textTransform: 'uppercase',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px'
+              }}>            <img 
+              src={minusMailBannerImage} 
+              alt="MinusMail Banner" 
+              style={{
+                height: '60px',
+                width: 'auto',
+                objectFit: 'contain'
+              }}
+            />MinusMail</h1>
               <h2 style={{
                 color: '#000',
                 fontSize: '1rem',
                 fontWeight: '800',
-                margin: '10px 0 0 0',
+                margin: '0 0 0 0',
                 textAlign: 'left',
                 fontFamily: '"Libre Baskerville", Georgia, serif'
-              }}>Check any MinusMail email address at any time</h2>
+              }}>Instantly MinusMail email address</h2>
             </div>
           </div>
         
