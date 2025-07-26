@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import styles from './EmailSidebar.module.css';
+import Modal from './Modal';
 
 interface EmailInputProps {
   currentEmail: string;
   onEmailUpdate: (email: string) => void;
+  isMobile?: boolean;
 }
 
-function EmailInput({ currentEmail, onEmailUpdate }: EmailInputProps) {
+function EmailInput({ currentEmail, onEmailUpdate, isMobile = false }: EmailInputProps) {
   const [inputValue, setInputValue] = useState(currentEmail);
   const [isValid, setIsValid] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Email username validation rules
   const validateUsername = (username: string): boolean => {
@@ -64,6 +67,7 @@ function EmailInput({ currentEmail, onEmailUpdate }: EmailInputProps) {
     // Only submit if valid
     if (validateUsername(cleanInput)) {
       onEmailUpdate(cleanInput);
+      setIsModalOpen(false);
     }
   };
 
@@ -73,6 +77,96 @@ function EmailInput({ currentEmail, onEmailUpdate }: EmailInputProps) {
     }
   };
 
+  const handleUpdateClick = () => {
+    setInputValue(currentEmail);
+    setIsValid(true);
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setInputValue(currentEmail);
+    setIsValid(true);
+  };
+
+  // Mobile version - just show current email and update button
+  if (isMobile) {
+    return (
+      <>
+        <div className={styles['mobile-email-section']}>
+          <div 
+            className={styles['mobile-email-display']}
+            style={{
+              fontSize: (currentEmail || 'username').length > 15 ? '10px' : '12px'
+            }}
+          >
+            {currentEmail || 'username'}@minusmail.com
+          </div>
+          <button 
+            onClick={handleUpdateClick}
+            className={styles['mobile-update-button']}
+          >
+            Update
+          </button>
+        </div>
+
+        <Modal 
+          isOpen={isModalOpen} 
+          onClose={handleModalClose}
+          title="Update Email Address"
+        >
+          <div className={styles['modal-content']}>
+            <div className={styles['modal-input-group']}>
+              <div className={styles['email-preview']}>
+                <span className={styles['preview-label']}>Preview:</span>
+                <span 
+                  className={styles['preview-email']}
+                  style={{
+                    fontSize: (inputValue.trim() || 'username').length > 14 ? '10px' : '16px'
+                  }}
+                >
+                  {inputValue.trim() || 'username'}@minusmail.com
+                </span>
+              </div>
+              <input
+                id="modal-email-input"
+                type="text"
+                value={inputValue}
+                onChange={handleInputChange}
+                onKeyPress={handleKeyPress}
+                placeholder="Enter username"
+                className={!isValid ? styles['invalid-input'] : ''}
+                autoFocus
+              />
+            </div>
+
+            {!isValid && (
+              <div className={styles['validation-error']}>
+                Invalid format
+              </div>
+            )}
+            <div className={styles['modal-actions']}>
+              <button 
+                onClick={handleModalClose}
+                className={styles['modal-cancel-button']}
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleSubmit} 
+                disabled={!isValid}
+                className={styles['modal-submit-button']}
+              >
+                Update
+              </button>
+            </div>
+          </div>
+        </Modal>
+      </>
+    );
+  }
+
+  // Desktop version - original implementation
   return (
     <div className={styles['update-section']}>
       <div className={styles['domain-suffix']}>Current Address: {currentEmail || 'username'}@minusmail.com</div>

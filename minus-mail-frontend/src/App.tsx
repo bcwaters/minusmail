@@ -138,7 +138,7 @@ function EmailApp() {
         )}
         <div className="email-display">
 
-          <EmailDisplay email={emailData} />
+          <EmailDisplay email={emailData} username={emailAddress} />
         </div>
         </div>
       </div>

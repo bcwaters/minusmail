@@ -19,11 +19,11 @@
 }
 
 .app-banner {
-  width: 100%;
+
   flex-shrink: 0;
   background: linear-gradient(135deg, #FBA43F 0%, #FFB366 100%);
   border: none;
-  padding: 5px;
+  padding: 0px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   display: flex;
   align-items: center;
@@ -161,7 +161,7 @@
 @media (max-width: 500px) {
   .app-banner {
     display: flex !important;
-    padding: 8px 0;
+  
     font-size: 0.95rem;
     min-height: 32px;
     line-height: 1.15;
@@ -225,7 +225,7 @@
     font-size: 1.05rem;
   }
   .app-container {
-   
+   width: 100%;
   }
   
   /* Mobile-specific styles */
@@ -252,7 +252,9 @@
 /* Prevent horizontal overflow */
 body, html, .app-container {
   background: #fff;
+  width: 100%;
   color: #000;
   margin: 0;
   overflow-x: hidden;
+  overflow-y: auto;
 }

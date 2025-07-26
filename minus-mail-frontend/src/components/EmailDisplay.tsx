@@ -7,9 +7,10 @@ import VerificationCodeDisplay from './VerificationCodeDisplay';
 
 interface EmailDisplayProps {
   email: EmailData | null;
+  username?: string;
 }
 
-function EmailDisplay({ email }: EmailDisplayProps) {
+function EmailDisplay({ email, username }: EmailDisplayProps) {
   const [verificationCode, setVerificationCode] = useState<string | null>(null);
   const [showCopyFeedback, setShowCopyFeedback] = useState(false);
   const [showTextCopyFeedback, setShowTextCopyFeedback] = useState(false);
@@ -45,15 +46,23 @@ function EmailDisplay({ email }: EmailDisplayProps) {
   if (!email) {
     if (window.innerWidth <= 600) {
       return (
-        <div className={styles['no-email']}>
-          Check your top left inbox to view an email
-        </div>
+      
+          <div className={styles['no-email-content']}>
+            <p>This is your temporary email inbox for <strong>{username || 'your username'}@minusmail.com</strong></p>
+            <p>Check your inbox in the top left to view emails</p>
+            <p>You can always update your email address to any other username</p>
+          </div>
+   
       );
     }
     return (
-      <div className={styles['no-email']}>
-        Select an email to view its content
-      </div>
+   
+        <div className={styles['no-email-content']}>
+          <p>This is your temporary email inbox for <strong>{username || 'your username'}@minusmail.com</strong></p>
+          <p>Select an email from the sidebar to view its content</p>
+          <p>You can always update your email address to any other username</p>
+        </div>
+
     );
   }
 

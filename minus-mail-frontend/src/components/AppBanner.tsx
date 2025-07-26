@@ -53,7 +53,7 @@ function AppBanner(_props: AppBannerProps) {
         flexDirection: 'column',
 
         // For mobile, override with -5px if needed
-        ...(isMobile ? { marginLeft: '-5px', marginRight: '-5px', marginTop: '-5px', marginBottom: '15px' } : {})
+        ...(isMobile ? { margin: '0px' } : {})
       }}>
         <div style={{
           display: 'flex',
@@ -149,7 +149,7 @@ function AppBanner(_props: AppBannerProps) {
             marginRight: isMobile ? '0' : '15px', 
             gap: '8px' 
           }}>
-            <EmailInput currentEmail={emailAddress} onEmailUpdate={handleEmailUpdate} />
+            <EmailInput currentEmail={emailAddress} onEmailUpdate={handleEmailUpdate} isMobile={isMobile} />
           </div>
         </div>
       </div>
