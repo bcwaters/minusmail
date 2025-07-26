@@ -60,6 +60,12 @@ sleep 0.5
 echo "Sending Email 9: WhisperAI false positive test..."
 echo -e "From: whisperai@mail.beehiiv.com\nTo: $EMAIL_ADDRESS\nSubject: Welcome to WhisperAI\nContent-Type: text/html\n\n<html><body><p>Welcome to WhisperAI!</p><p>This email contains CSS color codes like #121216, #595959, #697882 that should NOT be extracted as verification codes.</p><p>There is no actual verification code in this email.</p></body></html>" | sendmail $EMAIL_ADDRESS
 
+sleep 0.5
+
+# Email 10: No verification code
+echo "Sending Email 10: No verification code..."
+echo -e "From: noreply@testservice.com\nTo: $EMAIL_ADDRESS\nSubject: un releated\nContent-Type: text/html\n\n<html><body><p>This email does not contain a random string.</p></body></html>" | sendmail $EMAIL_ADDRESS
+
 echo ""
 echo "✅ All 9 test emails sent successfully!"
 echo ""
@@ -73,5 +79,6 @@ echo "6. 819746 (Canvas verification code)"
 echo "7. 217438 (X verification code)"
 echo "8. 987654 (no subject line)"
 echo "9. null (WhisperAI false positive - should NOT extract CSS color codes)"
+echo "10. null (No verification code)"
 echo ""
 echo "Check your MinusMail inbox to see the verification code extraction in action!" 
