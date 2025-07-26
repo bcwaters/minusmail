@@ -1,0 +1,80 @@
+.inboxIcon {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  color: #FBA43F;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inboxIcon:hover {
+  background-color: rgba(251, 164, 63, 0.1);
+  transform: translateY(-1px);
+}
+
+.inboxIcon:active {
+  transform: translateY(0);
+}
+
+.inboxIcon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background-color: #ff4444;
+  color: white;
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: bold;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.mobile {
+  padding: 16px;
+}
+
+.mobile svg {
+  width: 40px;
+  height: 40px;
+}
+
+.mobile .badge {
+  top: 4px;
+  right: 4px;
+  font-size: 11px;
+  min-width: 20px;
+  height: 20px;
+}
+
+/* Animation for new emails */
+@keyframes badgePulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.badge {
+  animation: badgePulse 0.6s ease-in-out;
+} 

@@ -7,6 +7,7 @@ import AppBanner from './components/AppBanner'
 import { socketService } from './services/SocketService'
 import { apiService, type EmailData } from './services/ApiService'
 import Inbox from './components/Inbox'
+import InboxModal from './components/InboxModal'
 
 // Component that handles the email functionality with routing
 function EmailApp() {
@@ -17,6 +18,8 @@ function EmailApp() {
   const [emailData, setEmailData] = useState<EmailData | null>(null)
   const [emailList, setEmailList] = useState<EmailData[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 600)
+  const [isInboxModalOpen, setIsInboxModalOpen] = useState(false)
   
   // Update email address when username param changes
   useEffect(() => {
@@ -24,6 +27,16 @@ function EmailApp() {
       setEmailAddress(username)
     }
   }, [username])
+
+  // Handle window resize for mobile detection
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 600)
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
   
   useEffect(() => {
     // Connect to socket with callbacks
@@ -88,29 +101,58 @@ function EmailApp() {
     navigate(`/${newEmail}`);
   };
 
+  const handleInboxIconClick = () => {
+    setIsInboxModalOpen(true);
+  };
+
+  const handleInboxModalClose = () => {
+    setIsInboxModalOpen(false);
+  };
+
   return (
     <div className="app-container">
       <div className="app-banner">
-        <AppBanner email={emailAddress} setEmail={handleEmailUpdate} emailList={emailList} isLoading={isLoading} emailData={emailData} handleEmailSelect={handleEmailSelect} />
+        <AppBanner 
+          email={emailAddress} 
+          setEmail={handleEmailUpdate} 
+          emailList={emailList} 
+          isLoading={isLoading} 
+          emailData={emailData} 
+          handleEmailSelect={handleEmailSelect}
+          onLogoClick={handleInboxIconClick}
+        />
       </div>
       <div className="main-content">
 
         <div className="email-container">
-        <div className="email-sidebar">
-
-          <Inbox 
-            emailList={emailList}
-            isLoading={isLoading}
-            emailData={emailData}
-            handleEmailSelect={handleEmailSelect}
-            userEmail={emailAddress}
-          />
-        </div>
+        {!isMobile && (
+          <div className="email-sidebar">
+            <Inbox 
+              emailList={emailList}
+              isLoading={isLoading}
+              emailData={emailData}
+              handleEmailSelect={handleEmailSelect}
+              userEmail={emailAddress}
+            />
+          </div>
+        )}
         <div className="email-display">
+
           <EmailDisplay email={emailData} />
         </div>
         </div>
       </div>
+
+      {/* Mobile Inbox Modal */}
+      <InboxModal
+        isOpen={isInboxModalOpen}
+        onClose={handleInboxModalClose}
+        emailList={emailList}
+        userEmail={emailAddress}
+        isLoading={isLoading}
+        emailData={emailData}
+        handleEmailSelect={handleEmailSelect}
+      />
     </div>
   )
 }

@@ -1,0 +1,26 @@
+.inboxContainer {
+  width: 100vw;
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.inboxLabel {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 12px;
+  padding: 0 16px;
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 8px;
+}
+
+/* Mobile optimizations */
+@media (max-width: 600px) {
+  .inboxLabel {
+    font-size: 1rem;
+    padding: 0 12px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+  }
+} 

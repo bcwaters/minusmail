@@ -8,6 +8,15 @@
   font-family: 'Georgia, Times New Roman, serif';
 }
 
+/* Modal-specific styles */
+.inboxContainerModal {
+  padding: 0;
+  height: auto;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
 .inboxTitleLabel {
   margin: 0 0 10px 0;
 
@@ -24,6 +33,11 @@
   font-size: 1.1rem;
   color: #000;
   font-weight: 600;
+}
+
+/* Hide title in modal since it's in the modal header */
+.inboxTitleModal {
+  display: none;
 }
 
 /* Filter Section Styles */
@@ -84,6 +98,12 @@
   overflow-y: auto;
 }
 
+/* Modal-specific email list */
+.emailListModal {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
 .emailItem {
   padding: 8px;
   margin: 4px 0;
@@ -129,4 +149,33 @@
 .emailDate {
   font-size: 10px;
   color: #999;
+}
+
+/* Mobile optimizations */
+@media (max-width: 600px) {
+  .emailListModal {
+    max-height: 50vh;
+  }
+  
+  .emailItem {
+    padding: 12px;
+    margin: 6px 0;
+  }
+  
+  .emailSubject {
+    font-size: 14px;
+  }
+  
+  .emailFrom {
+    font-size: 12px;
+  }
+  
+  .emailDate {
+    font-size: 11px;
+  }
+  
+  .downloadButton {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
 } 

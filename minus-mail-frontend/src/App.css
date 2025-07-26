@@ -78,6 +78,25 @@
   background: #fff;
   border: none;
   color: #000;
+  position: relative;
+}
+
+/* Mobile inbox icon container */
+.mobile-inbox-icon-container {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.inbox-label {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #333;
+  white-space: nowrap;
 }
 
 .logo {
@@ -207,6 +226,17 @@
   }
   .app-container {
    
+  }
+  
+  /* Mobile-specific styles */
+  .mobile-inbox-icon-container {
+    top: 12px;
+    right: 12px;
+    gap: 6px;
+  }
+  
+  .inbox-label {
+    font-size: 1.1rem;
   }
 }
 

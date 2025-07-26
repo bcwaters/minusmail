@@ -43,6 +43,13 @@ function EmailDisplay({ email }: EmailDisplayProps) {
   };
   
   if (!email) {
+    if (window.innerWidth <= 600) {
+      return (
+        <div className={styles['no-email']}>
+          Check your top left inbox to view an email
+        </div>
+      );
+    }
     return (
       <div className={styles['no-email']}>
         Select an email to view its content

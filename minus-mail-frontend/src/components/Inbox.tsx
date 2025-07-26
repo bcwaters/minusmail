@@ -8,9 +8,10 @@ interface InboxProps {
   isLoading: boolean;
   emailData: EmailData | null;
   handleEmailSelect: (email: EmailData) => void;
+  isModal?: boolean;
 }
 
-const Inbox: React.FC<InboxProps> = ({ emailList, isLoading, emailData, handleEmailSelect, userEmail }) => {
+const Inbox: React.FC<InboxProps> = ({ emailList, isLoading, emailData, handleEmailSelect, userEmail, isModal = false }) => {
   const [now, setNow] = useState(Date.now());
 
   useEffect(() => {
@@ -57,9 +58,9 @@ const Inbox: React.FC<InboxProps> = ({ emailList, isLoading, emailData, handleEm
   };
 
   return (
-    <div className={styles.inboxContainer}>
+    <div className={`${styles.inboxContainer} ${isModal ? styles.inboxContainerModal : ''}`}>
        <h4 className={styles.inboxTitleLabel}>{userEmail}@minusmail.com</h4>
-      <h3 className={styles.inboxTitle}>Inbox ({emailList.length} {emailList.length <2 ? 'email' : 'emails'})</h3>
+      <h3 className={`${styles.inboxTitle} ${isModal ? styles.inboxTitleModal : ''}`}>Inbox ({emailList.length} {emailList.length <2 ? 'email' : 'emails'})</h3>
       
       {/* Filter Section 
             <div className={styles.filterSection}>
@@ -91,7 +92,7 @@ const Inbox: React.FC<InboxProps> = ({ emailList, isLoading, emailData, handleEm
           No emails yet
         </div>
       ) : (
-        <div className={styles.emailList}>
+        <div className={`${styles.emailList} ${isModal ? styles.emailListModal : ''}`}>
           {emailList.map((email, index) => (
             <div
               key={index}
