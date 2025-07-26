@@ -23,13 +23,21 @@
 .email-header {
   background: #f8f9fa;
   border: 1px solid #ddd;
-  padding: 20px;
+ 
+  border-bottom: 1px solid #ddd;
+}
+
+.header-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
   border-bottom: 1px solid #ddd;
 }
 
 .email-field {
   
-  margin-bottom: 12px;
+  padding: 3px;
   display: flex;
   align-items: flex-start;
 }
@@ -57,9 +65,8 @@
   font-size: 18px;
   font-weight: 600;
   color: #000;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #ddd;
+  flex: 1;
+  margin-right: 16px;
 }
 
 .copy-feedback {
@@ -112,10 +119,38 @@
 }
 
 .email-content h1, .email-content h2, .email-content h3 {
-  margin-top: 20px;
-  margin-bottom: 12px;
+
   color: #000;
 } 
+
+.copy-text-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #D7ECFF;
+  color: #333;
+  border: 1px solid #FBA43F;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.copy-text-button:hover {
+  background: #B8D9F0;
+}
+
+.copy-text-button:active {
+  background: #A3CCE6;
+}
+
+.copy-icon {
+  width: 16px;
+  height: 16px;
+}
 
 @media (max-width: 600px) {
   .email-container {
@@ -125,17 +160,16 @@
     box-shadow: none;
   }
   .email-header {
-    padding: 12px;
+    padding: 2px;
   }
   .email-subject {
     font-size: 16px;
-    margin-bottom: 10px;
-    padding-bottom: 8px;
+
   }
   .email-field {
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
-    margin-bottom: 8px;
+    padding: 2px;
   }
   .email-field-label {
     min-width: 0;
@@ -143,6 +177,7 @@
     font-size: 13px;
   }
   .email-field-value {
+    margin-left: 10px;
     font-size: 13px;
   }
   .email-content {
@@ -158,5 +193,31 @@
     height: 200px;
     font-size: 14px;
     border-radius: 0;
+  }
+  
+  .header-top-row {
+    flex-direction: row;
+    align-items: stretch;
+  
+  }
+  
+  .email-subject {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+  
+  .copy-text-button {
+    padding: 8px 12px;
+    font-size: 13px;
+    align-self: flex-end;
+  }
+  
+  .copy-text-button span {
+    display: none;
+  }
+  
+  .copy-icon {
+    width: 14px;
+    height: 14px;
   }
 } 

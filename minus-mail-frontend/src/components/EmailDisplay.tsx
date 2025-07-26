@@ -12,6 +12,7 @@ interface EmailDisplayProps {
 function EmailDisplay({ email }: EmailDisplayProps) {
   const [verificationCode, setVerificationCode] = useState<string | null>(null);
   const [showCopyFeedback, setShowCopyFeedback] = useState(false);
+  const [showTextCopyFeedback, setShowTextCopyFeedback] = useState(false);
 
   // console.log('EmailDisplay', email);
   
@@ -29,6 +30,17 @@ function EmailDisplay({ email }: EmailDisplayProps) {
     setShowCopyFeedback(true);
     setTimeout(() => setShowCopyFeedback(false), 2000);
   };
+
+  const handleCopyTextToClipboard = async () => {
+    const textContent = email?.textBody || 'No text content';
+    try {
+      await navigator.clipboard.writeText(textContent);
+      setShowTextCopyFeedback(true);
+      setTimeout(() => setShowTextCopyFeedback(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
   
   if (!email) {
     return (
@@ -38,13 +50,10 @@ function EmailDisplay({ email }: EmailDisplayProps) {
     );
   }
 
-  const htmlContent = email?.htmlBody || '<p>No HTML content</p>';
-  const textContent = email?.textBody || 'No text content';
+  const htmlContent = email?.htmlBody || email?.textBody || '<p>No content</p>';
 
   // Sanitize HTML
   const sanitizedHtml = DOMPurify.sanitize(htmlContent);
-  //append text content to the html content
-  const htmlWithText = sanitizedHtml + '<p> text content: <br/>' + textContent + '</p>';
 
   return (
     <div className={styles['email-container']}>
@@ -62,9 +71,29 @@ function EmailDisplay({ email }: EmailDisplayProps) {
           Code copied to clipboard!
         </div>
       )}
+
+      {/* Show text copy feedback */}
+      {showTextCopyFeedback && (
+        <div className={styles['copy-feedback']}>
+          Plain text copied to clipboard!
+        </div>
+      )}
+
       <div className={styles['email-header']}>
-        <div className={styles['email-subject']}>
-          {email.subject || 'No Subject'}
+        <div className={styles['header-top-row']}>
+          <div className={styles['email-subject']}>
+            {email.subject || 'No Subject'}
+          </div>
+          <button 
+            className={styles['copy-text-button']}
+            onClick={handleCopyTextToClipboard}
+            title="Copy plain text to clipboard"
+          >
+            <svg className={styles['copy-icon']} viewBox="0 0 24 24" fill="currentColor">
+              <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+            </svg>
+            <span>Copy to clipboard</span>
+          </button>
         </div>
         <div className={styles['email-field']}>
           <div className={styles['email-field-label']}>From:</div>
@@ -78,11 +107,9 @@ function EmailDisplay({ email }: EmailDisplayProps) {
         </div>
       </div>
       
-
-      
       <div
         className={styles['email-content']}
-        dangerouslySetInnerHTML={{ __html: htmlWithText }}
+        dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
       />
     </div>
   );

@@ -157,7 +157,7 @@ export class ApiGatewayController {
       
       // Emit to connected clients using the gateway
       this.emailGateway.server.to(username).emit('new-email', {
-        emailId,
+        id: emailId,
         ...emailData
       });
 

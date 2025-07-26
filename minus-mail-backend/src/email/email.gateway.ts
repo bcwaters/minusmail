@@ -48,6 +48,11 @@ export class EmailGateway implements OnGatewayConnection, OnGatewayDisconnect, O
           const data = JSON.parse(message);
           console.log('[GATEWAY] Redis notification received for:', data.username);
           
+          // Ensure the email has an id field using the Redis-generated emailId
+          if (data.email && !data.email.id) {
+            data.email.id = data.emailId;
+          }
+          
           // Emit the new email to all clients in the username room
           this.server.to(data.username).emit('new-email', data.email);
           console.log(`[GATEWAY] Emitted email to room: ${data.username}`);

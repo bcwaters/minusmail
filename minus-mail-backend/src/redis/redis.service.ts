@@ -4,6 +4,7 @@ import { createClient } from 'redis';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface EmailData {
+  id: string;
   from: string;
   subject: string;
   htmlBody: string;
@@ -104,7 +105,11 @@ export class RedisService implements OnModuleInit {
     try {
       const data = await this.redisClient.get(emailId);
       const emailData = data ? JSON.parse(data.toString()) : null;
-      emailData.id = emailId;
+      
+      if (emailData) {
+        emailData.id = emailId;
+      }
+      
       return emailData;
     } catch (error) {
       this.logger.error(`Failed to get email ${emailId}:`, error);
