@@ -16,7 +16,7 @@
 }
 
 /* Mobile optimizations */
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   .inboxLabel {
     font-size: 1rem;
     padding: 0 12px;

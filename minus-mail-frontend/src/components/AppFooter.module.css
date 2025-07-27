@@ -68,7 +68,7 @@
 }
 
 /* Mobile styles */
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   .footerContainer {
     padding-top: 2px;
   }

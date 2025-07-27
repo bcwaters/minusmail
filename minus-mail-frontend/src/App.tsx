@@ -19,7 +19,7 @@ function EmailApp() {
   const [emailData, setEmailData] = useState<EmailData | null>(null)
   const [emailList, setEmailList] = useState<EmailData[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 600)
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 700)
   const [isInboxModalOpen, setIsInboxModalOpen] = useState(false)
   
   // Update email address when username param changes
@@ -32,7 +32,7 @@ function EmailApp() {
   // Handle window resize for mobile detection
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 600)
+      setIsMobile(window.innerWidth <= 700)
     }
 
     window.addEventListener('resize', handleResize)

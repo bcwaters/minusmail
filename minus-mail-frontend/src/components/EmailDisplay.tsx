@@ -44,7 +44,7 @@ function EmailDisplay({ email, username }: EmailDisplayProps) {
   };
   
   if (!email) {
-    if (window.innerWidth <= 600) {
+    if (window.innerWidth <= 700) {
       return (
       
           <div className={styles['no-email-content']}>

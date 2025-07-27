@@ -90,15 +90,18 @@
 }
 
 .logoContainer {
-  position: absolute;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
 }
 
 .logoImage {
-
   height: 60px;
   width: auto;
   object-fit: contain;
   cursor: pointer;
+  transition: opacity 0.3s ease;
 }
 
 .logoImageMobile {
@@ -109,13 +112,13 @@
 
 .badge {
   position: absolute;
-  top: -10px;
-  right: -11px;
+  top: -5px;
+  right: -8px;
   background-color: #94bee2;
   border-radius: 50%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   padding: 1px;
-  font-size: .5rem;;
+  font-size: .5rem;
   color: #555;
   font-weight: bold;
   min-width: 14px;
@@ -126,6 +129,17 @@
   line-height: 1;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   animation: badgePulse 0.6s ease-in-out;
+}
+
+/* Mobile badge positioning */
+@media (max-width: 700px) {
+  .badge {
+    top: -3px;
+    right: -6px;
+    min-width: 12px;
+    height: 12px;
+    font-size: 0.4rem;
+  }
 }
 
 .bannerSubtitle {
