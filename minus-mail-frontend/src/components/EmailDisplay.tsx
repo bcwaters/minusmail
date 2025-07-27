@@ -84,14 +84,14 @@ function EmailDisplay({ email, username }: EmailDisplayProps) {
       {/* Show copy feedback */}
       {showCopyFeedback && (
         <div className={styles['copy-feedback']}>
-          Code copied to clipboard!
+          Code copied!
         </div>
       )}
 
       {/* Show text copy feedback */}
       {showTextCopyFeedback && (
         <div className={styles['copy-feedback']}>
-          Plain text copied to clipboard!
+          Email copied!
         </div>
       )}
 
@@ -99,17 +99,22 @@ function EmailDisplay({ email, username }: EmailDisplayProps) {
         <div className={styles['header-top-row']}>
           <div className={styles['email-subject']}>
             {email.subject || 'No Subject'}
+            
           </div>
-          <button 
-            className={styles['copy-text-button']}
-            onClick={handleCopyTextToClipboard}
-            title="Copy plain text to clipboard"
-          >
-            <svg className={styles['copy-icon']} viewBox="0 0 24 24" fill="currentColor">
-              <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-            </svg>
-            <span>Copy to clipboard</span>
-          </button>
+          <div className={styles['copy-button-container']}>
+            <button 
+              className={styles['copy-text-button']}
+              onClick={handleCopyTextToClipboard}
+              title="Copy plain text to clipboard"
+            >
+              <svg className={styles['copy-icon']} viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+              </svg>
+
+            </button>
+            <div className={styles['copy-button-label']}>Copy email</div>
+          </div>
+
         </div>
         <div className={styles['email-field']}>
           <div className={styles['email-field-label']}>From:</div>
@@ -127,6 +132,7 @@ function EmailDisplay({ email, username }: EmailDisplayProps) {
         className={styles['email-content']}
         dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
       />
+ 
     </div>
   );
 }

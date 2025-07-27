@@ -34,9 +34,7 @@ const VerificationCodeDisplay: React.FC<VerificationCodeDisplayProps> = ({ code,
             </svg>
         </button>
       </div>
-      <div className={styles.footer}>
-        Click the clipboard icon to copy the code
-      </div>
+      
     </div>
   );
 };

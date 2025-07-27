@@ -19,7 +19,6 @@
 }
 
 .app-banner {
-
   flex-shrink: 0;
   background: linear-gradient(135deg, #FBA43F 0%, #FFB366 100%);
   border: none;
@@ -30,19 +29,28 @@
   justify-content: center;
 }
 
+.app-footer {
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #FBA43F 0%, #FFB366 100%);
+  border: none;
+  padding: 0px;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 25px;
+}
+
 .main-content {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  margin-right: 2x;
-  margin-left: 2px;
   max-width: 1200px;
   padding-top: 5px;
   flex: 1;
   background: #f4f4f4;
   color: #000;
-
 }
 
 .email-sidebar {
@@ -53,8 +61,6 @@
   flex-shrink: 0;
   border: none;
   background: #fff;
- 
-  
   overflow-y: auto;
   color: #000;
   margin-left: 0;
@@ -73,7 +79,6 @@
   flex: 1;
   min-width: 0;
   box-sizing: border-box;
- 
   overflow: auto;
   background: #fff;
   border: none;
@@ -105,9 +110,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -139,67 +146,42 @@
   color: #666;
 }
 
-@media (max-width: 800px) {
-  .main-content {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 0 4px;
-  }
-  .email-sidebar {
-    max-width: 100%;
-    min-width: 0;
-    width: 100%;
-    margin-bottom: 16px;
-    padding: 0;
-  }
-  .email-display {
-    padding: 0;
-    min-width: 0;
-  }
+.email-nav-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+  width: 100%;
+  margin-top: 0px;
 }
 
-@media (max-width: 500px) {
+/* Prevent horizontal overflow */
+body, html, .app-container {
+  background: #fff;
+  width: 100%;
+  color: #000;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* ===== MOBILE STYLES ===== */
+@media (max-width: 600px) {
   .app-banner {
+    padding-top: 10px;
     display: flex !important;
-  
     font-size: 0.95rem;
     min-height: 32px;
     line-height: 1.15;
-    text-align: center;
   }
-  .main-content {
-    padding-top: 0px;
-    font-size: 0.95rem;
-  }
-  .email-sidebar {
-    font-size: 0.90rem;
-    padding: 0;
-    color: #111 !important;
-  }
-  .email-display {
-    padding: 0;
-    color: #111 !important;
-    font-size: 0.95rem;
-  }
-  h3 {
-    font-size: 0.95rem;
-    color: #111 !important;
-  }
-  body, html {
-    margin: 0;
-    color: #111 !important;
-    font-size: 0.95rem;
-  }
-}
-
-@media (max-width: 600px) {
+  
   .main-content {
     flex-direction: column;
     align-items: stretch;
     padding-top: 0px;
     max-width: 100%;
-    margin-top: 5px;
+    font-size: 0.95rem;
   }
+  
   .email-sidebar {
     max-width: 100%;
     min-width: 0;
@@ -207,25 +189,33 @@
     margin-bottom: 12px;
     padding: 0 4px;
     font-size: 0.98rem;
+    color: #111 !important;
   }
+  
   .email-container {
     flex-direction: column;
     align-items: stretch;
   }
+  
   .email-display {
-    padding: 0 4px 8px 4px;
     min-width: 0;
     font-size: 0.98rem;
+    padding: 0;
+    color: #111 !important;
   }
+  
   .card {
     padding: 1em;
     border-radius: 8px;
   }
+  
   h3 {
     font-size: 1.05rem;
+    color: #111 !important;
   }
+  
   .app-container {
-   width: 100%;
+    width: 100%;
   }
   
   /* Mobile-specific styles */
@@ -238,23 +228,10 @@
   .inbox-label {
     font-size: 1.1rem;
   }
-}
-
-.email-nav-bar {
-  display: flex;
-  flex-direction: row;
-  align-items: left;
- 
-  width: 100%;
-  margin-top:0px;
-}
-
-/* Prevent horizontal overflow */
-body, html, .app-container {
-  background: #fff;
-  width: 100%;
-  color: #000;
-  margin: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
+  
+  body, html {
+    margin: 0;
+    color: #111 !important;
+    font-size: 0.95rem;
+  }
 }

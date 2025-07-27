@@ -4,6 +4,7 @@ import EmailDisplay from './components/EmailDisplay'
 import './App.css'
 
 import AppBanner from './components/AppBanner'
+import AppFooter from './components/AppFooter'
 import { socketService } from './services/SocketService'
 import { apiService, type EmailData } from './services/ApiService'
 import Inbox from './components/Inbox'
@@ -141,6 +142,10 @@ function EmailApp() {
           <EmailDisplay email={emailData} username={emailAddress} />
         </div>
         </div>
+      </div>
+
+      <div className="app-footer">
+        <AppFooter />
       </div>
 
       {/* Mobile Inbox Modal */}

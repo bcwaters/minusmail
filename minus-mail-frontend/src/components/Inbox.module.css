@@ -105,8 +105,8 @@
 }
 
 .emailItem {
-  padding: 8px;
-  margin: 4px 0;
+  padding: 12px;
+  margin: 6px 8px;
   border-radius: 4px;
   cursor: pointer;
   color: #000;
@@ -158,8 +158,8 @@
   }
   
   .emailItem {
-    padding: 12px;
-    margin: 6px 0;
+    padding: 16px;
+    margin: 8px 12px;
   }
   
   .emailSubject {

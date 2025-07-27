@@ -9,3 +9,146 @@
     transform: scale(1);
   }
 }
+
+.bannerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex-direction: column;
+}
+
+.bannerContainerMobile {
+  padding-top: 5px;
+}
+
+.bannerContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex-direction: row;
+
+ 
+}
+
+.bannerContentMobile {
+  flex-direction: column;
+}
+
+.bannerLeft {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+.bannerTextContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-center;
+}
+
+.bannerTitle {
+  cursor: pointer;
+  color: #f5f5dc;
+  font-size: 2rem;
+  padding-bottom: 10px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  margin: 0 auto;
+  font-family: Georgia, Times New Roman, serif;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+
+}
+
+.bannerTitle h1{
+  cursor: pointer;
+  margin: 0 auto;
+}
+
+.bannerTitleMobile h1{
+  margin: 0 auto;
+  font-size: 1.2rem;
+  cursor: pointer;
+  text-align: center;
+}
+
+.bannerTitleMobile {
+  margin: 0 auto;
+  font-size: 1.2rem;
+  cursor: pointer;
+  text-align: center;
+}
+
+.bannerTitleMobile:hover {
+  opacity: 0.8;
+}
+
+.logoContainer {
+  position: absolute;
+}
+
+.logoImage {
+
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.logoImageMobile {
+  margin:-10px 0 0 0;
+  height: 40px;
+  cursor: pointer;
+}
+
+.badge {
+  position: absolute;
+  top: -10px;
+  right: -11px;
+  background-color: #94bee2;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 1px;
+  font-size: .5rem;;
+  color: #555;
+  font-weight: bold;
+  min-width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: badgePulse 0.6s ease-in-out;
+}
+
+.bannerSubtitle {
+  color: #000;
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin: 0 0 0 8px;
+  text-align: left;
+  font-family: "Libre Baskerville", Georgia, serif;
+}
+
+.bannerRight {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  width: auto;
+ 
+  gap: 8px;
+}
+
+.bannerRightMobile {
+  justify-content: center;
+  width: 100%;
+  margin-right: 0;
+}

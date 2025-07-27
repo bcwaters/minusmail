@@ -19,146 +19,12 @@ const SPECIFIC_SELECTORS = [
 const NON_CONTENT_TAGS = ['SCRIPT', 'STYLE', 'NOSCRIPT', 'META', 'LINK', 'TITLE'];
 
 const COMMON_WORDS = [
-    'code', 'access', 'request',
+    'code', 'will', 'this', 'that', 'here', 'your', 'have', 'been', 'with', 'from',
+    'they', 'them', 'their', 'when', 'where', 'what', 'why', 'how', 'access', 'request',
     'originated', 'address', 'please', 'enter', 'use', 'complete', 'registration',
     'verification', 'account', 'continue', 'started', 'expire', 'expires', 'minutes',
     'hours', 'days', 'years'
 ];
-
-/**
- * Comprehensive list of verification-related keywords that indicate an email is about verification
- */
-const VERIFICATION_KEYWORDS = [
-    // Core verification terms
-    'verify', 'verification', 'verified', 'verifying', 'verifies',
-    'authenticate', 'authentication', 'authenticated', 'authenticating',
-    'confirm', 'confirmation', 'confirmed', 'confirming',
-    'validate', 'validation', 'validated', 'validating',
-    
-    // Code-related terms
-    'code', 'codes', 'verification code', 'verification codes',
-    'otp', 'one-time password', 'one time password', 'one-time code', 'one time code',
-    'pin', 'personal identification number', 'access code', 'access codes',
-    'security code', 'security codes', 'authentication code', 'authentication codes',
-    'confirmation code', 'confirmation codes', 'activation code', 'activation codes',
-    'login code', 'login codes', 'signin code', 'signin codes', 'sign-in code', 'sign-in codes',
-    'two-factor', 'two factor', '2fa', '2-factor', '2 factor',
-    'multi-factor', 'multi factor', 'mfa', 'multi-factor authentication',
-    
-    // Account security terms
-    'account security', 'secure your account', 'protect your account',
-    'account verification', 'account validation', 'account confirmation',
-    'login verification', 'login validation', 'signin verification', 'signin validation',
-    'sign-in verification', 'sign-in validation', 'signup verification', 'signup validation',
-    'sign-up verification', 'sign-up validation', 'registration verification',
-    'registration validation', 'email verification', 'email validation',
-    'phone verification', 'phone validation', 'mobile verification', 'mobile validation',
-    'sms verification', 'sms validation', 'text verification', 'text validation',
-    
-    // Action-oriented terms
-    'enter code', 'enter the code', 'enter your code', 'enter verification code',
-    'input code', 'input the code', 'input your code', 'input verification code',
-    'type code', 'type the code', 'type your code', 'type verification code',
-    'use code', 'use the code', 'use your code', 'use verification code',
-    'submit code', 'submit the code', 'submit your code', 'submit verification code',
-    'complete verification', 'complete validation', 'complete confirmation',
-    'finish verification', 'finish validation', 'finish confirmation',
-    
-    // Time-sensitive terms
-    'expires', 'expire', 'expiration', 'expiring', 'time limit', 'time-limited',
-    'valid for', 'valid until', 'expires in', 'expires at', 'expires on',
-    'minutes', 'seconds', 'hours', 'time-sensitive', 'time sensitive',
-    
-    // Security and trust terms
-    'secure', 'security', 'protected', 'protection', 'safe', 'safety',
-    'trust', 'trusted', 'trustworthy', 'reliable', 'reliability',
-    'authorized', 'authorization', 'authorize', 'authorizing',
-    'approved', 'approval', 'approve', 'approving',
-    
-    // Identity and access terms
-    'identity', 'identification', 'identify', 'identifying',
-    'access', 'accessible', 'accessing', 'access granted', 'access denied',
-    'login', 'log in', 'logging in', 'logged in', 'signin', 'sign in', 'signing in',
-    'signup', 'sign up', 'signing up', 'signed up', 'register', 'registration',
-    'account', 'accounts', 'profile', 'profiles', 'user', 'users',
-    
-    // Notification and alert terms
-    'alert', 'alerts', 'notification', 'notifications', 'notify', 'notified',
-    'warning', 'warnings', 'important', 'urgent', 'critical', 'security alert',
-    'suspicious activity', 'unusual activity', 'new login', 'new signin',
-    'new device', 'new location', 'new ip', 'new ip address',
-    
-    // Request and response terms
-    'request', 'requested', 'requesting', 'request for', 'requested by',
-    'response', 'respond', 'responding', 'reply', 'replied', 'replying',
-    'sent', 'sending', 'send', 'delivered', 'delivery', 'deliver',
-    
-    // Setup and configuration terms
-    'setup', 'set up', 'setting up', 'configure', 'configuration', 'configuring',
-    'enable', 'enabled', 'enabling', 'activate', 'activated', 'activating',
-    'install', 'installed', 'installing', 'setup verification', 'setup validation',
-    
-    // Recovery and reset terms
-    'recover', 'recovery', 'recovering', 'reset', 'resetting', 'reset password',
-    'forgot password', 'forgotten password', 'lost password', 'change password',
-    'update password', 'new password', 'password reset', 'password recovery',
-    
-    // Device and location terms
-    'device', 'devices', 'computer', 'computers', 'mobile', 'phone', 'smartphone',
-    'tablet', 'laptop', 'desktop', 'browser', 'browsers', 'app', 'application',
-    'location', 'locations', 'ip address', 'ip addresses', 'geographic',
-    'country', 'countries', 'city', 'cities', 'region', 'regions',
-    
-    // Service-specific terms
-    'google', 'gmail', 'microsoft', 'outlook', 'hotmail', 'yahoo', 'apple', 'icloud',
-    'facebook', 'twitter', 'instagram', 'linkedin', 'amazon', 'netflix', 'spotify',
-    'paypal', 'stripe', 'square', 'venmo', 'zelle', 'bank', 'banking', 'financial',
-    'credit card', 'debit card', 'payment', 'payments', 'billing', 'invoice',
-    
-    // Technical terms
-    'api', 'application programming interface', 'webhook', 'webhooks',
-    'endpoint', 'endpoints', 'token', 'tokens', 'session', 'sessions',
-    'cookie', 'cookies', 'cache', 'caching', 'database', 'databases',
-    'server', 'servers', 'client', 'clients', 'protocol', 'protocols'
-];
-
-/**
- * Checks if the email content contains verification-related keywords
- * @param text - The text content to check
- * @returns True if verification keywords are found, false otherwise
- */
-function hasVerificationContext(text: string): boolean {
-    const normalizedText = text.toLowerCase();
-    
-    // Check for verification keywords
-    for (const keyword of VERIFICATION_KEYWORDS) {
-        if (normalizedText.includes(keyword.toLowerCase())) {
-            return true;
-        }
-    }
-    
-    // Additional pattern-based checks for common verification phrases
-    const verificationPatterns = [
-        /\b(?:enter|input|type|use|submit)\s+(?:the\s+)?(?:verification\s+)?(?:code|otp|pin)\b/i,
-        /\b(?:verification|authentication|confirmation)\s+(?:code|otp|pin)\b/i,
-        /\b(?:two|2)\s*[-]?\s*factor\s+(?:authentication|verification|code)\b/i,
-        /\b(?:multi|multiple)\s*[-]?\s*factor\s+(?:authentication|verification|code)\b/i,
-        /\b(?:security|access)\s+(?:code|otp|pin)\b/i,
-        /\b(?:login|signin|sign-in)\s+(?:verification|authentication|code)\b/i,
-        /\b(?:account|email|phone|mobile|sms)\s+(?:verification|authentication|confirmation)\b/i,
-        /\b(?:verify|authenticate|confirm|validate)\s+(?:your|the)\s+(?:account|email|phone|identity)\b/i,
-        /\b(?:code|otp|pin)\s+(?:is|will be|has been)\s+(?:sent|delivered|provided)\b/i,
-        /\b(?:expires|expire|expiration)\s+(?:in|at|on|within)\b/i
-    ];
-    
-    for (const pattern of verificationPatterns) {
-        if (pattern.test(normalizedText)) {
-            return true;
-        }
-    }
-    
-    return false;
-}
 
 /**
  * Preprocesses HTML to extract meaningful text content, filtering out non-content elements
@@ -276,14 +142,6 @@ export function extractVerificationCode(htmlEmail: string): string | null {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlEmail, 'text/html');
 
-        // Preprocess HTML to get text content for verification context check
-        const text = preprocessHtmlContent(htmlEmail);
-        
-        // Check if the email has verification context - if not, return null immediately
-        if (!hasVerificationContext(text)) {
-            return null;
-        }
-
         // Check specific elements with IDs or classes
         for (const selector of SPECIFIC_SELECTORS) {
             const element = doc.querySelector(selector);
@@ -295,7 +153,8 @@ export function extractVerificationCode(htmlEmail: string): string | null {
             }
         }
 
-        // Apply patterns to the preprocessed text
+        // Preprocess HTML and apply patterns
+        const text = preprocessHtmlContent(htmlEmail);
         return applyCodePatterns(text);
     } catch (error) {
         console.warn('Error extracting verification code from HTML:', error);
@@ -325,15 +184,8 @@ export function extractVerificationCodeFromEmail(htmlContent: string, textConten
             .trim()
             .replace(/[\n\t]+/g, ' ')
             .replace(/\s+/g, ' ');
-        
-        // Check if the email has verification context - if not, return null immediately
-        if (!hasVerificationContext(normalizedText)) {
-            return null;
-        }
-        
         return applyCodePatterns(normalizedText);
     }
 
     return null;
 }
-

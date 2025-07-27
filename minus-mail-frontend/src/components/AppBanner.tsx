@@ -16,7 +16,6 @@ interface AppBannerProps {
 }
 
 function AppBanner(_props: AppBannerProps) {
-  const [bannerFontSize, setBannerFontSize] = useState(window.innerWidth <= 600 ? '1.5rem' : '2.5rem');
   const [emailAddress, setEmailAddress] = useState(_props.email);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
   const navigate = useNavigate();
@@ -24,7 +23,6 @@ function AppBanner(_props: AppBannerProps) {
   useEffect(() => {
     function handleResize() {
       const mobile = window.innerWidth <= 600;
-      setBannerFontSize(mobile ? '1.5rem' : '2.5rem');
       setIsMobile(mobile);
     }
     window.addEventListener('resize', handleResize);
@@ -40,120 +38,44 @@ function AppBanner(_props: AppBannerProps) {
   const handleLogoClick = () => {
     if (isMobile && _props.onLogoClick) {
       _props.onLogoClick();
+    }else{
+      window.location.href = '/';
     }
   };
 
   return (
-  
-      <div className={styles.bannerContainer} style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
-        flexDirection: 'column',
+    <div className={`${styles.bannerContainer} ${isMobile ? styles.bannerContainerMobile : ''}`}>
+      <div className={`${styles.bannerContent} ${isMobile ? styles.bannerContentMobile : ''}`}>
+        <div className={styles.bannerLeft}>
+        <div className={styles.logoContainer}>
+                <img 
+                  onClick={handleLogoClick}
+                  src={minusMailBannerImage} 
+                  alt="MinusMail Banner" 
+                  className={`${styles.logoImage} ${isMobile ? styles.logoImageMobile : ''}`}
+                />
+                {isMobile && _props.emailList.length > 0 && (
+                  <span className={styles.badge}>
+                    {_props.emailList.length > 99 ? '99+' : _props.emailList.length}
+                  </span>
+                )}
+              </div>
+          <div className={styles.bannerTextContainer}>
+            <h1 
+              className={`${styles.bannerTitle} ${isMobile ? styles.bannerTitleMobile : ''}`}
+              onClick={() => window.location.href = '/'}
+            >
+              MinusMail
+            </h1>
 
-        // For mobile, override with -5px if needed
-        ...(isMobile ? { margin: '0px' } : {})
-      }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          width: '100%',
-          flexDirection: isMobile ? 'column' : 'row',
-          padding: '0 20px',
-          gap: '20px'
-        }}>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-         
-            width: '100%'
-          }}>
-
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start'
-            }}>
-              <h1 style={{
-                color: '#fff',
-                fontSize: bannerFontSize,
-                fontWeight: '800',
-                letterSpacing: '3px',
-                margin: '0',
-                fontFamily: 'Georgia, Times New Roman, serif',
-                textTransform: 'uppercase',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '25px',
-                cursor: isMobile ? 'pointer' : 'default'
-              }} onClick={handleLogoClick}>
-                <div style={{ position: 'relative' }}>
-                  <img 
-                    src={minusMailBannerImage} 
-                    alt="MinusMail Banner" 
-                    style={{
-                      margin: '0 0 0 0',
-                      height: '60px',
-                      width: 'auto',
-                      objectFit: 'contain',
-                      cursor: isMobile ? 'pointer' : 'default'
-                    }}
-                  />
-                  {isMobile && _props.emailList.length > 0 && (
-                    <span style={{
-                      position: 'absolute',
-                      top: '1px',
-                      right: '-15px',
-                      backgroundColor: '#D7ECFF',
-                      border: '1px solid #999',
-                      borderRadius: '10px',
-                      padding: '4px 4px',
-                      fontSize: '12px',
-                      color: '#000',
-                      fontWeight: 'bold',
-                      minWidth: '18px',
-                      height: '18px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      lineHeight: 1,
-                      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-                      animation: 'badgePulse 0.6s ease-in-out'
-                    }}>
-                      {_props.emailList.length > 99 ? '99+' : _props.emailList.length}
-                    </span>
-                  )}
-                </div>
-                MinusMail
-              </h1>
-              <h2 style={{
-                color: '#000',
-                fontSize: '.9rem',
-                fontWeight: '800',
-                margin: '0 0 0 8px',
-                textAlign: 'left',
-                fontFamily: '"Libre Baskerville", Georgia, serif'
-              }}>Instantly check any MinusMail email</h2>
-            </div>
-          </div>
-        
-          <div style={{ 
-            display: 'flex', 
-            flexDirection: 'row', 
-            alignItems: 'center', 
-            justifyContent: isMobile ? 'center' : 'flex-end',
-            width: isMobile ? '100%' : 'auto',
-            marginRight: isMobile ? '0' : '15px', 
-            gap: '8px' 
-          }}>
-            <EmailInput currentEmail={emailAddress} onEmailUpdate={handleEmailUpdate} isMobile={isMobile} />
           </div>
         </div>
+      
+        <div className={`${styles.bannerRight} ${isMobile ? styles.bannerRightMobile : ''}`}>
+          <EmailInput currentEmail={emailAddress} onEmailUpdate={handleEmailUpdate} isMobile={isMobile} />
+        </div>
       </div>
-
+    </div>
   );
 }
 
