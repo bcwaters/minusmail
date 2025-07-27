@@ -19,8 +19,7 @@ const SPECIFIC_SELECTORS = [
 const NON_CONTENT_TAGS = ['SCRIPT', 'STYLE', 'NOSCRIPT', 'META', 'LINK', 'TITLE'];
 
 const COMMON_WORDS = [
-    'code', 'will', 'this', 'that', 'here', 'your', 'have', 'been', 'with', 'from',
-    'they', 'them', 'their', 'when', 'where', 'what', 'why', 'how', 'access', 'request',
+    'code', 'access', 'request',
     'originated', 'address', 'please', 'enter', 'use', 'complete', 'registration',
     'verification', 'account', 'continue', 'started', 'expire', 'expires', 'minutes',
     'hours', 'days', 'years'

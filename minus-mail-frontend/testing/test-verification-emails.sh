@@ -64,7 +64,7 @@ sleep 0.5
 
 # Email 10: No verification code
 echo "Sending Email 10: No verification code..."
-echo -e "From: noreply@testservice.com\nTo: $EMAIL_ADDRESS\nSubject: un releated\nContent-Type: text/html\n\n<html><body><p>This email does not contain a random string.</p></body></html>" | sendmail $EMAIL_ADDRESS
+echo -e "From: noreply@testservice.com\nTo: $EMAIL_ADDRESS\nSubject: un related email\nContent-Type: text/html\n\n<html><body><p>This email does not contain a random string.</p></body></html>" | sendmail $EMAIL_ADDRESS
 
 echo ""
 echo "✅ All 9 test emails sent successfully!"
