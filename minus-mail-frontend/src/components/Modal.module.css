@@ -6,10 +6,11 @@
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   z-index: 1000;
-  padding: 16px;
+  padding: 10px 16px;
+  padding-top: 10px;
 }
 
 .modalContent {
@@ -41,6 +42,8 @@
   font-weight: 600;
   color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  text-align: center;
+  flex: 1;
 }
 
 .closeButton {
@@ -70,6 +73,45 @@
   overflow-y: auto;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.modal-cancel-button {
+  padding: 10px 20px;
+  background: #6c757d;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.modal-cancel-button:hover {
+  background: #5a6268;
+}
+
+.modal-submit-button {
+  padding: 10px 20px;
+  background: #e85c00;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.modal-submit-button:hover:not(:disabled) {
+  background: #e89600;
+}
+
+.modal-submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 @keyframes modalSlideIn {

@@ -12,13 +12,15 @@ function EmailInput({ currentEmail, onEmailUpdate, isMobile = false }: EmailInpu
   const [inputValue, setInputValue] = useState(currentEmail);
   const [isValid, setIsValid] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
+  const [keystrokeCount, setKeystrokeCount] = useState(0);
 
   // Email username validation rules
   const validateUsername = (username: string): boolean => {
     if (!username) return false;
     
     // Must be 3-64 characters long
-    if (username.length < 3 || username.length > 64) return false;
+    if (username.length < 0 || username.length > 64) return false;
     
     // Must start with a letter or number
     if (!/^[a-zA-Z0-9]/.test(username)) return false;
@@ -40,6 +42,7 @@ function EmailInput({ currentEmail, onEmailUpdate, isMobile = false }: EmailInpu
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setInputValue(value);
+    setKeystrokeCount(prev => prev + 1);
     
     // Validate the cleaned input
     let cleanInput = value.trim();
@@ -54,6 +57,8 @@ function EmailInput({ currentEmail, onEmailUpdate, isMobile = false }: EmailInpu
   };
 
   const handleSubmit = () => {
+    setHasAttemptedSubmit(true);
+    
     // Strip @minusmail.com if present and clean the input
     let cleanInput = inputValue.trim();
     if (cleanInput.endsWith('@minusmail.com')) {
@@ -68,6 +73,8 @@ function EmailInput({ currentEmail, onEmailUpdate, isMobile = false }: EmailInpu
     if (validateUsername(cleanInput)) {
       onEmailUpdate(cleanInput);
       setIsModalOpen(false);
+      setHasAttemptedSubmit(false);
+      setKeystrokeCount(0);
     }
   };
 
@@ -78,8 +85,10 @@ function EmailInput({ currentEmail, onEmailUpdate, isMobile = false }: EmailInpu
   };
 
   const handleUpdateClick = () => {
-    setInputValue(currentEmail);
-    setIsValid(true);
+    setInputValue('');
+    setIsValid(false);
+    setHasAttemptedSubmit(false);
+    setKeystrokeCount(0);
     setIsModalOpen(true);
   };
 
@@ -87,6 +96,8 @@ function EmailInput({ currentEmail, onEmailUpdate, isMobile = false }: EmailInpu
     setIsModalOpen(false);
     setInputValue(currentEmail);
     setIsValid(true);
+    setHasAttemptedSubmit(false);
+    setKeystrokeCount(0);
   };
 
   // Mobile version - just show current email and update button
@@ -118,11 +129,10 @@ function EmailInput({ currentEmail, onEmailUpdate, isMobile = false }: EmailInpu
           <div className={styles['modal-content']}>
             <div className={styles['modal-input-group']}>
               <div className={styles['email-preview']}>
-                <span className={styles['preview-label']}>Preview:</span>
                 <span 
                   className={styles['preview-email']}
                   style={{
-                    fontSize: (inputValue.trim() || 'username').length > 14 ? '10px' : '16px'
+                    fontSize: (inputValue.trim() || 'username').length > 12 ? '12px' : '14px'
                   }}
                 >
                   {inputValue.trim() || 'username'}@minusmail.com
@@ -135,12 +145,12 @@ function EmailInput({ currentEmail, onEmailUpdate, isMobile = false }: EmailInpu
                 onChange={handleInputChange}
                 onKeyPress={handleKeyPress}
                 placeholder="Enter username"
-                className={!isValid ? styles['invalid-input'] : ''}
+                className={!isValid && inputValue.trim() !== '' ? styles['invalid-input'] : ''}
                 autoFocus
               />
             </div>
 
-            {!isValid && (
+            {!isValid && hasAttemptedSubmit && keystrokeCount > 3 && (
               <div className={styles['validation-error']}>
                 Invalid format
               </div>
@@ -179,14 +189,14 @@ function EmailInput({ currentEmail, onEmailUpdate, isMobile = false }: EmailInpu
             onChange={handleInputChange}
             onKeyPress={handleKeyPress}
             placeholder="Enter username"
-            className={!isValid ? styles['invalid-input'] : ''}
+            className={!isValid && inputValue.trim() !== '' ? styles['invalid-input'] : ''}
           />
         </div>
         <button onClick={handleSubmit} disabled={!isValid}>
           Update
         </button>
       </div>
-      {!isValid && (
+      {!isValid && hasAttemptedSubmit && keystrokeCount > 3 && (
         <div className={styles['validation-error']}>
           Invalid format
         </div>

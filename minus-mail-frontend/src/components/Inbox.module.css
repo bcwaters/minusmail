@@ -1,11 +1,12 @@
 .inboxContainer {
-
   padding: 10px;
   height: 100%;
   border: 1px solid #FBA43F;
   border-radius: 1px;
   background: #fff;
   font-family: 'Georgia, Times New Roman, serif';
+  display: flex;
+  flex-direction: column;
 }
 
 /* Modal-specific styles */
@@ -19,13 +20,13 @@
 
 .inboxTitleLabel {
   margin: 0 0 10px 0;
-
   font-size: .9rem;
   color: #555;
   font-weight: 600;
   font-family: 'Georgia, Times New Roman, serif';
   text-align: center;
   border-bottom: 1.5px solid #ccc;
+  flex-shrink: 0;
 }
 
 .inboxTitle {
@@ -33,6 +34,7 @@
   font-size: 1.1rem;
   color: #000;
   font-weight: 600;
+  flex-shrink: 0;
 }
 
 /* Hide title in modal since it's in the modal header */
@@ -47,6 +49,7 @@
   background: #f8f9fa;
   border-radius: 8px;
   border: 1px solid #e9ecef;
+  flex-shrink: 0;
 }
 
 .filterInputContainer {
@@ -94,8 +97,9 @@
 }
 
 .emailList {
-  max-height: 300px;
+  flex: 1;
   overflow-y: auto;
+  min-height: 0; /* Allow flex item to shrink */
 }
 
 /* Modal-specific email list */

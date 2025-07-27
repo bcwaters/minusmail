@@ -2,8 +2,19 @@
 
 # Test script to send 9 emails with verification codes in HTML body
 # Usage: ./test-verification-emails.sh [email_address]
+#use a for loop to generation a stirng that is 5000 chars long with ranom spaces and new lines
+
+# Generate a random string of 5000 characters
+#every 50 chars add a new line
+RANDOM_STRING=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 5000 | head -n 1 | sed 's/.\{50\}/&\n/g')
 
 EMAIL_ADDRESS=${1:-"test@minusmail.com"}
+LOADED_EMAIL=
+
+# False positive email contents for testing
+FWD_HI_DANNY_EMAIL=$(cat ~/repo/minusmail/minus-mail-frontend/testing/email_samples/falsePositives/fwd__hi_danny_.html)
+WELCOME_TO_WHISPERAI_EMAIL=$(cat ~/repo/minusmail/minus-mail-frontend/testing/email_samples/falsePositives/welcome_to_whisperai.html)
+NO_SUBJECT_EMAIL=$(cat ~/repo/minusmail/minus-mail-frontend/testing/email_samples/no_subject\(1\).html)
 
 echo "Sending test emails to: $EMAIL_ADDRESS"
 echo "======================================"
@@ -65,6 +76,14 @@ sleep 0.5
 # Email 10: No verification code
 echo "Sending Email 10: No verification code..."
 echo -e "From: noreply@testservice.com\nTo: $EMAIL_ADDRESS\nSubject: un related email\nContent-Type: text/html\n\n<html><body><p>This email does not contain a random string.</p></body></html>" | sendmail $EMAIL_ADDRESS
+
+sleep 0.5
+
+# Email 11: Forward Hi Danny false positive test case (should return null)
+echo "Sending Email 11: Forward Hi Danny false positive test..."
+echo -e "From: noreply@testservice.com\nTo: $EMAIL_ADDRESS\nSubject: Forward Hi Danny\nContent-Type: text/html\n\n<html><body><p>This $RANDOM_STRING does not contain a random string.</p></body></html>" | sendmail $EMAIL_ADDRESS
+
+sleep 0.5
 
 echo ""
 echo "✅ All 9 test emails sent successfully!"
