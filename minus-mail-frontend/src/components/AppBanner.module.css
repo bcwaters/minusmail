@@ -90,7 +90,7 @@
 }
 
 .logoContainer {
-  position: fixed;
+
   top: 10px;
   left: 10px;
   z-index: 1000;
@@ -133,6 +133,9 @@
 
 /* Mobile badge positioning */
 @media (max-width: 700px) {
+  .logoContainer{
+    position:fixed;
+  }
   .badge {
     top: -3px;
     right: -6px;
