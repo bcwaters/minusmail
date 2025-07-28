@@ -70,18 +70,21 @@
 }
 
 .email-container {
+  
   background-color: #f4f4f4;
   display: contents; /* Use grid layout instead of flex */
   width: 100%;
+  box-sizing: border-box;
 }
 
 .email-display {
+  box-sizing: border-box;
   flex: 1;
   min-width: 0;
   box-sizing: border-box;
   overflow: auto;
   background: #fff;
-  border: none;
+  border-right: 1px solid #fba43f;
   color: #000;
   position: relative;
   height: 100%; /* Take full height */
@@ -203,6 +206,7 @@ body, html, .app-container {
   }
   
   .email-display {
+
     min-width: 0;
     font-size: 0.98rem;
     padding: 0;
