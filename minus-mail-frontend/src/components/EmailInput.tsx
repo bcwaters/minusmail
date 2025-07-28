@@ -179,7 +179,9 @@ function EmailInput({ currentEmail, onEmailUpdate, isMobile = false }: EmailInpu
   // Desktop version 
   return (
     <div className={styles['update-section']}>
-      <div className={styles['domain-suffix']}>Current Address: {currentEmail || 'username'}@minusmail.com</div>
+      <div className={styles['domain-suffix']}>
+       Update Email: {inputValue.trim() || 'username'}@minusmail.com
+      </div>
       <div className={styles['input-group']}>
         <div className={styles['input-wrapper']}>
           <input

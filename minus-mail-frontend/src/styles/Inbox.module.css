@@ -7,6 +7,13 @@
   font-family: 'Georgia, Times New Roman, serif';
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.inboxContainer::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .inboxTitleLabel {
@@ -103,7 +110,7 @@
   position: absolute;
   top: 6px;
   right: 8px;
-  font-size: 10px;
+  font-size: 8px;
   padding: 2px 6px;
   border-radius: 4px;
   border: 1px solid #FBA43F;
@@ -172,7 +179,7 @@
   }
   
   .downloadButton {
-    font-size: 11px;
+    font-size: 8px;
     padding: 4px 8px;
   }
 } 

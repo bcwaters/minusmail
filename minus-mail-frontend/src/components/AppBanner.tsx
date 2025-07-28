@@ -46,7 +46,11 @@ function AppBanner(_props: AppBannerProps) {
   return (
     <>
  
-      <div className={styles.logoContainer}>
+
+      <div className={styles.bannerContainer}>
+        <div className={styles.bannerContent}>
+          <div className={styles.bannerLeft}>
+          <div className={styles.logoContainer}>
         <img 
           onClick={handleLogoClick}
           src={minusMailBannerImage} 
@@ -59,9 +63,6 @@ function AppBanner(_props: AppBannerProps) {
           </span>
         )}
       </div>
-      <div className={styles.bannerContainer}>
-        <div className={styles.bannerContent}>
-          <div className={styles.bannerLeft}>
             <div className={styles.bannerTextContainer}>
               <h1 
                 className={styles.bannerTitle}
