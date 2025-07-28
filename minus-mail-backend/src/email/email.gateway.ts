@@ -53,9 +53,12 @@ export class EmailGateway implements OnGatewayConnection, OnGatewayDisconnect, O
             data.email.id = data.emailId;
           }
           
+          // Convert username to lowercase for consistency
+          const normalizedUsername = data.username.toLowerCase();
+          
           // Emit the new email to all clients in the username room
-          this.server.to(data.username).emit('new-email', data.email);
-          console.log(`[GATEWAY] Emitted email to room: ${data.username}`);
+          this.server.to(normalizedUsername).emit('new-email', data.email);
+          console.log(`[GATEWAY] Emitted email to room: ${normalizedUsername}`);
         } catch (error) {
           console.error('[GATEWAY] Error processing Redis notification:', error);
         }
@@ -86,41 +89,44 @@ export class EmailGateway implements OnGatewayConnection, OnGatewayDisconnect, O
   async handleJoin(client: Socket, emailId: string) {
     console.log('[GATEWAY] Join request:', client.id, '->', emailId);
 
-    client.join(emailId);
-    console.log('[GATEWAY] Client joined room:', emailId);
+    // Convert emailId to lowercase for consistency
+    const normalizedEmailId = emailId.toLowerCase();
+    
+    client.join(normalizedEmailId);
+    console.log('[GATEWAY] Client joined room:', normalizedEmailId);
     
     try {
       // Process any existing emails for this emailId
-      const email = await this.emailProcessorService.processEmail({ emailId });
+      const email = await this.emailProcessorService.processEmail({ emailId: normalizedEmailId });
       
       if (email) {
-        console.log('[GATEWAY] Emitting existing email to:', emailId);
-        this.server.to(emailId).emit('new-email', email);
+        console.log('[GATEWAY] Emitting existing email to:', normalizedEmailId);
+        this.server.to(normalizedEmailId).emit('new-email', email);
       } else {
-        console.log('[GATEWAY] No emails found, sending welcome to:', emailId);
+        console.log('[GATEWAY] No emails found, sending welcome to:', normalizedEmailId);
         // Send welcome message for new email addresses
         const welcomeEmail = {
-          id: emailId,
+          id: normalizedEmailId,
           from: 'system@minusmail.com',
           subject: 'Welcome to MinusMail',
-          htmlBody: '<p>Welcome to your temporary email inbox! Any emails sent to <b>' + emailId + '@minusmail.com</b> will appear here.</p>',
-          textBody: 'Welcome to your temporary email inbox! Any emails sent to ' + emailId + '@minusmail.com will appear here.',
+          htmlBody: '<p>Welcome to your temporary email inbox! Any emails sent to <b>' + normalizedEmailId + '@minusmail.com</b> will appear here.</p>',
+          textBody: 'Welcome to your temporary email inbox! Any emails sent to ' + normalizedEmailId + '@minusmail.com will appear here.',
           received: new Date().toISOString(),
         };
-        this.server.to(emailId).emit('new-email', welcomeEmail);
+        this.server.to(normalizedEmailId).emit('new-email', welcomeEmail);
       }
     } catch (error) {
       console.error('[GATEWAY] Error in join handler:', error);
       // Send a fallback email if service fails
       const fallbackEmail = {
-        id: emailId,
+        id: normalizedEmailId,
         from: 'system@minusmail.com',
         subject: 'Welcome to MinusMail',
-        htmlBody: '<p>Welcome to your temporary email inbox! Any emails sent to <b>' + emailId + '@minusmail.com</b> will appear here.</p>',
-        textBody: 'Welcome to your temporary email inbox! Any emails sent to ' + emailId + '@minusmail.com will appear here.',
+        htmlBody: '<p>Welcome to your temporary email inbox! Any emails sent to <b>' + normalizedEmailId + '@minusmail.com</b> will appear here.</p>',
+        textBody: 'Welcome to your temporary email inbox! Any emails sent to ' + normalizedEmailId + '@minusmail.com will appear here.',
         received: new Date().toISOString(),
       };
-      this.server.to(emailId).emit('new-email', fallbackEmail);
+      this.server.to(normalizedEmailId).emit('new-email', fallbackEmail);
     }
   }
 
@@ -128,16 +134,19 @@ export class EmailGateway implements OnGatewayConnection, OnGatewayDisconnect, O
   async handleTriggerEmail(client: Socket, emailId: string) {
     console.log('Manual email trigger requested for:', emailId);
     
+    // Convert emailId to lowercase for consistency
+    const normalizedEmailId = emailId.toLowerCase();
+    
     try {
       // Process emails for the given emailId
-      const email = await this.emailProcessorService.processEmail({ emailId });
+      const email = await this.emailProcessorService.processEmail({ emailId: normalizedEmailId });
       
       if (email) {
-        console.log('Email found and emitted to room:', emailId);
-        this.server.to(emailId).emit('new-email', email);
+        console.log('Email found and emitted to room:', normalizedEmailId);
+        this.server.to(normalizedEmailId).emit('new-email', email);
         return email;
       } else {
-        console.log('No emails found for:', emailId);
+        console.log('No emails found for:', normalizedEmailId);
         return { message: 'No emails found for this address' };
       }
     } catch (error) {

@@ -83,12 +83,13 @@ export class ApiGatewayController {
   @Get('username/:username')
   async getEmailsByUsername(@Param('username') username: string) {
     try {
-      const emails = await this.redisService.getEmailsForUsername(username);
-      const count = await this.redisService.getEmailCount(username);
+      const normalizedUsername = username.toLowerCase();
+      const emails = await this.redisService.getEmailsForUsername(normalizedUsername);
+      const count = await this.redisService.getEmailCount(normalizedUsername);
       
       return {
         status: 'ok',
-        username,
+        username: normalizedUsername,
         emails,
         count
       };
@@ -96,7 +97,7 @@ export class ApiGatewayController {
       return {
         status: 'error',
         error: error.message,
-        username
+        username: username.toLowerCase()
       };
     }
   }
@@ -107,17 +108,18 @@ export class ApiGatewayController {
   @Get('username/:username/count')
   async getEmailCountByUsername(@Param('username') username: string) {
     try {
-      const count = await this.redisService.getEmailCount(username);
+      const normalizedUsername = username.toLowerCase();
+      const count = await this.redisService.getEmailCount(normalizedUsername);
       return {
         status: 'ok',
-        username,
+        username: normalizedUsername,
         count
       };
     } catch (error) {
       return {
         status: 'error',
         error: error.message,
-        username
+        username: username.toLowerCase()
       };
     }
   }
@@ -128,10 +130,11 @@ export class ApiGatewayController {
   @Get('username/:username/ids')
   async getEmailIdsByUsername(@Param('username') username: string) {
     try {
-      const emailIds = await this.redisService.getEmailIds(username);
+      const normalizedUsername = username.toLowerCase();
+      const emailIds = await this.redisService.getEmailIds(normalizedUsername);
       return {
         status: 'ok',
-        username,
+        username: normalizedUsername,
         emailIds,
         count: emailIds.length
       };
@@ -139,7 +142,7 @@ export class ApiGatewayController {
       return {
         status: 'error',
         error: error.message,
-        username
+        username: username.toLowerCase()
       };
     }
   }
@@ -153,10 +156,11 @@ export class ApiGatewayController {
     @Body() emailData: EmailData
   ) {
     try {
-      const emailId = await this.redisService.storeEmail(username, emailData);
+      const normalizedUsername = username.toLowerCase();
+      const emailId = await this.redisService.storeEmail(normalizedUsername, emailData);
       
       // Emit to connected clients using the gateway
-      this.emailGateway.server.to(username).emit('new-email', {
+      this.emailGateway.server.to(normalizedUsername).emit('new-email', {
         id: emailId,
         ...emailData
       });
@@ -164,7 +168,7 @@ export class ApiGatewayController {
       return {
         status: 'ok',
         message: 'Email stored successfully',
-        username,
+        username: normalizedUsername,
         emailId,
         email: emailData
       };
@@ -172,7 +176,7 @@ export class ApiGatewayController {
       return {
         status: 'error',
         error: error.message,
-        username
+        username: username.toLowerCase()
       };
     }
   }
@@ -186,18 +190,19 @@ export class ApiGatewayController {
     @Param('emailId') emailId: string
   ) {
     try {
-      await this.redisService.removeEmail(username, emailId);
+      const normalizedUsername = username.toLowerCase();
+      await this.redisService.removeEmail(normalizedUsername, emailId);
       return {
         status: 'ok',
         message: 'Email removed successfully',
-        username,
+        username: normalizedUsername,
         emailId
       };
     } catch (error) {
       return {
         status: 'error',
         error: error.message,
-        username,
+        username: username.toLowerCase(),
         emailId
       };
     }
@@ -209,17 +214,18 @@ export class ApiGatewayController {
   @Post('username/:username/cleanup')
   async cleanupExpiredEmails(@Param('username') username: string) {
     try {
-      await this.redisService.cleanupExpiredEmails(username);
+      const normalizedUsername = username.toLowerCase();
+      await this.redisService.cleanupExpiredEmails(normalizedUsername);
       return {
         status: 'ok',
         message: 'Expired emails cleaned up',
-        username
+        username: normalizedUsername
       };
     } catch (error) {
       return {
         status: 'error',
         error: error.message,
-        username
+        username: username.toLowerCase()
       };
     }
   }
@@ -273,9 +279,10 @@ export class ApiGatewayController {
     console.log('processEmailsForUsername triggered for username:', username);
 
     try {
+      const normalizedUsername = username.toLowerCase();
       // Get all emails for this username
-      const emails = await this.redisService.getEmailsForUsername(username);
-      console.log(`Found ${emails.length} emails for username: ${username}`);
+      const emails = await this.redisService.getEmailsForUsername(normalizedUsername);
+      console.log(`Found ${emails.length} emails for username: ${normalizedUsername}`);
 
       if (emails.length > 0) {
         // Get the most recent email
@@ -286,24 +293,24 @@ export class ApiGatewayController {
         console.log('Most recent email:', mostRecentEmail);
 
         // Emit to connected clients using the gateway
-        console.log('About to emit to room:', username);
+        console.log('About to emit to room:', normalizedUsername);
         console.log('Event name: new-email');
         console.log('Event data:', mostRecentEmail);
         
-        this.emailGateway.server.to(username).emit('new-email', mostRecentEmail);
-        console.log('Emitted email to room:', username);
+        this.emailGateway.server.to(normalizedUsername).emit('new-email', mostRecentEmail);
+        console.log('Emitted email to room:', normalizedUsername);
 
         return { 
           message: 'Email processed successfully', 
-          username, 
+          username: normalizedUsername, 
           email: mostRecentEmail,
           totalEmails: emails.length
         };
       } else {
-        console.log('No emails found for username:', username);
+        console.log('No emails found for username:', normalizedUsername);
         return { 
           message: 'No emails found for this username', 
-          username, 
+          username: normalizedUsername, 
           totalEmails: 0
         };
       }
@@ -311,7 +318,7 @@ export class ApiGatewayController {
       console.error('Error in processEmailsForUsername:', error);
       return { 
         message: 'Email processing failed', 
-        username, 
+        username: username.toLowerCase(), 
         error: error.message 
       };
     }

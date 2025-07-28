@@ -39,7 +39,7 @@ process.stdin.on('end', async () => {
     
     // Extract username from the "to" field (e.g., "test@minusmail.com" -> "test")
     const toAddress = parsed.to?.value[0]?.address || '';
-    const username = toAddress.split('@')[0];
+    const username = toAddress.split('@')[0].toLowerCase();
     
     log(`To address: ${toAddress}, Username: ${username}`);
     

@@ -19,7 +19,7 @@ export class EmailProcessorService implements OnModuleInit {
     
     try {
       // Extract username from emailId (handle both "test" and "test@minusmail.com")
-      const username = data.emailId.includes('@') ? data.emailId.split('@')[0] : data.emailId;
+      const username = (data.emailId.includes('@') ? data.emailId.split('@')[0] : data.emailId).toLowerCase();
       console.log('[PROCESSOR] Processing username:', username);
       
       // Get all emails for this username from Redis
@@ -51,9 +51,10 @@ export class EmailProcessorService implements OnModuleInit {
    */
   async getAllEmailsForUsername(username: string): Promise<any[]> {
     try {
-      console.log(`Getting all emails for username: ${username}`);
-      const emails = await this.redisService.getEmailsForUsername(username);
-      console.log(`Found ${emails.length} emails for username: ${username}`);
+      const normalizedUsername = username.toLowerCase();
+      console.log(`Getting all emails for username: ${normalizedUsername}`);
+      const emails = await this.redisService.getEmailsForUsername(normalizedUsername);
+      console.log(`Found ${emails.length} emails for username: ${normalizedUsername}`);
       return emails;
     } catch (error) {
       console.error(`Error getting emails for username ${username}:`, error);
@@ -68,9 +69,10 @@ export class EmailProcessorService implements OnModuleInit {
    */
   async getEmailCount(username: string): Promise<number> {
     try {
-      console.log(`Getting email count for username: ${username}`);
-      const count = await this.redisService.getEmailCount(username);
-      console.log(`Email count for ${username}: ${count}`);
+      const normalizedUsername = username.toLowerCase();
+      console.log(`Getting email count for username: ${normalizedUsername}`);
+      const count = await this.redisService.getEmailCount(normalizedUsername);
+      console.log(`Email count for ${normalizedUsername}: ${count}`);
       return count;
     } catch (error) {
       console.error(`Error getting email count for username ${username}:`, error);
