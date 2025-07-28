@@ -49,8 +49,9 @@ function EmailDisplay({ email, username }: EmailDisplayProps) {
       
           <div className={styles['no-email-content']}>
             <p>This is your temporary email inbox for <strong>{username || 'your username'}@minusmail.com</strong></p>
-            <p>Check your inbox in the top left to view emails</p>
-            <p>You can always update your email address to any other username</p>
+            <p>Check your inbox in the top left to view emails. Update which email you are checking by clicking the update button.</p>
+            <p>Emails are automatically deleted after 15 mins.  There is no log in required meaning anybody can instantly check any minusmail address.  For your convenience we try to detect codes and offer a copy button for verification codes when they are detected. </p>
+            <p>Enjoy!</p>
           </div>
    
       );
@@ -60,7 +61,8 @@ function EmailDisplay({ email, username }: EmailDisplayProps) {
         <div className={styles['no-email-content']}>
           <p>This is your temporary email inbox for <strong>{username || 'your username'}@minusmail.com</strong></p>
           <p>Select an email from the sidebar to view its content</p>
-          <p>You can always update your email address to any other username</p>
+          <p>Emails are automatically deleted after 15 mins.  There is no log in required meaning anybody can instantly check any minusmail address.  For your convenience we try to detect codes and offer a copy button for verification codes when they are detected. </p>
+          <p>Enjoy!</p>
         </div>
 
     );
