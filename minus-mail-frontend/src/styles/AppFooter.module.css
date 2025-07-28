@@ -48,25 +48,6 @@
   align-items: center;
 }
 
-.footerRight {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-  width: auto;
-  height: 100%;
-  gap: 8px;
-}
-
-.footerSubtitle {
-  color: #000;
-  font-size: 0.7rem;
-  font-weight: 600;
-  margin: 0 8px 0 0;
-  text-align: right;
-  font-family: "Libre Baskerville", Georgia, serif;
-}
-
 /* Mobile styles */
 @media (max-width: 700px) {
   .footerContainer {
@@ -76,9 +57,5 @@
   .footerText {
     font-size: 0.7rem;
     letter-spacing: 0.5px;
-  }
-  
-  .footerSubtitle {
-    font-size: 0.6rem;
   }
 } 

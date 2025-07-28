@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './EmailSidebar.module.css';
+import styles from '../styles/EmailInput.module.css';
 import Modal from './Modal';
 
 interface EmailInputProps {
@@ -100,7 +100,7 @@ function EmailInput({ currentEmail, onEmailUpdate, isMobile = false }: EmailInpu
     setKeystrokeCount(0);
   };
 
-  // Mobile version - just show current email and update button
+  // Mobile version 
   if (isMobile) {
     return (
       <>
@@ -176,7 +176,7 @@ function EmailInput({ currentEmail, onEmailUpdate, isMobile = false }: EmailInpu
     );
   }
 
-  // Desktop version - original implementation
+  // Desktop version 
   return (
     <div className={styles['update-section']}>
       <div className={styles['domain-suffix']}>Current Address: {currentEmail || 'username'}@minusmail.com</div>

@@ -1,7 +1,7 @@
 import type { EmailData } from '../services/ApiService';
 import minusMailBannerImage from '../assets/minusmail_icon_2.png';
 import EmailInput from './EmailInput';
-import styles from './AppBanner.module.css';
+import styles from '../styles/AppBanner.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
@@ -18,7 +18,6 @@ interface AppBannerProps {
 function AppBanner(_props: AppBannerProps) {
   const [emailAddress, setEmailAddress] = useState(_props.email);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
-  const [logoOpacity, setLogoOpacity] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,28 +27,6 @@ function AppBanner(_props: AppBannerProps) {
     }
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Handle scroll for logo opacity
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const maxScroll = 20; // Adjust this value to control when opacity reaches minimum
-      const minOpacity = 0; // Minimum opacity when scrolled
-      
-      if (scrollY <= 0) {
-        setLogoOpacity(1);
-      } else if (scrollY >= maxScroll) {
-        setLogoOpacity(minOpacity);
-      } else {
-        // Linear interpolation between 1 and minOpacity
-        const opacity = 1 - ((scrollY / maxScroll) * (1 - minOpacity));
-        setLogoOpacity(opacity);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const handleEmailUpdate = (newEmail: string) => {
@@ -68,13 +45,13 @@ function AppBanner(_props: AppBannerProps) {
 
   return (
     <>
+ 
       <div className={styles.logoContainer}>
         <img 
           onClick={handleLogoClick}
           src={minusMailBannerImage} 
           alt="MinusMail Banner" 
-          className={`${styles.logoImage} ${isMobile ? styles.logoImageMobile : ''}`}
-          style={{ opacity: logoOpacity }}
+          className={styles.logoImage}
         />
         {isMobile && _props.emailList.length > 0 && (
           <span className={styles.badge}>
@@ -82,12 +59,12 @@ function AppBanner(_props: AppBannerProps) {
           </span>
         )}
       </div>
-      <div className={`${styles.bannerContainer} ${isMobile ? styles.bannerContainerMobile : ''}`}>
-        <div className={`${styles.bannerContent} ${isMobile ? styles.bannerContentMobile : ''}`}>
+      <div className={styles.bannerContainer}>
+        <div className={styles.bannerContent}>
           <div className={styles.bannerLeft}>
             <div className={styles.bannerTextContainer}>
               <h1 
-                className={`${styles.bannerTitle} ${isMobile ? styles.bannerTitleMobile : ''}`}
+                className={styles.bannerTitle}
                 onClick={() => window.location.href = '/'}
               >
                 MinusMail
@@ -95,7 +72,7 @@ function AppBanner(_props: AppBannerProps) {
             </div>
           </div>
         
-          <div className={`${styles.bannerRight} ${isMobile ? styles.bannerRightMobile : ''}`}>
+          <div className={styles.bannerRight}>
             <EmailInput currentEmail={emailAddress} onEmailUpdate={handleEmailUpdate} isMobile={isMobile} />
           </div>
         </div>

@@ -9,15 +9,6 @@
   flex-direction: column;
 }
 
-/* Modal-specific styles */
-.inboxContainerModal {
-  padding: 0;
-  height: auto;
-  border: none;
-  border-radius: 0;
-  background: transparent;
-}
-
 .inboxTitleLabel {
   margin: 0 0 10px 0;
   font-size: .9rem;
@@ -35,11 +26,6 @@
   color: #000;
   font-weight: 600;
   flex-shrink: 0;
-}
-
-/* Hide title in modal since it's in the modal header */
-.inboxTitleModal {
-  display: none;
 }
 
 /* Filter Section Styles */
@@ -102,12 +88,6 @@
   min-height: 0; /* Allow flex item to shrink */
 }
 
-/* Modal-specific email list */
-.emailListModal {
-  max-height: 60vh;
-  overflow-y: auto;
-}
-
 .emailItem {
   padding: 12px;
   margin: 6px 8px;
@@ -155,10 +135,23 @@
   color: #999;
 }
 
-/* Mobile optimizations */
+/* Modal styles using media queries */
 @media (max-width: 700px) {
-  .emailListModal {
+  .inboxContainer {
+    padding: 0;
+    height: auto;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+  }
+  
+  .inboxTitle {
+    display: none;
+  }
+  
+  .emailList {
     max-height: 50vh;
+    overflow-y: auto;
   }
   
   .emailItem {

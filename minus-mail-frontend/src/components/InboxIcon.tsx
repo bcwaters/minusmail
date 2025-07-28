@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './InboxIcon.module.css';
+import styles from '../styles/InboxIcon.module.css';
 
 interface InboxIconProps {
   emailCount: number;
@@ -10,7 +10,7 @@ interface InboxIconProps {
 const InboxIcon: React.FC<InboxIconProps> = ({ emailCount, onClick, isMobile = false }) => {
   return (
     <button 
-      className={`${styles.inboxIcon} ${isMobile ? styles.mobile : ''}`}
+      className={styles.inboxIcon}
       onClick={onClick}
       title="Open Inbox"
     >

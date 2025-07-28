@@ -1,6 +1,6 @@
 import DOMPurify from 'dompurify';
 import { useState, useEffect } from 'react';
-import styles from './EmailDisplay.module.css';
+import styles from '../styles/EmailDisplay.module.css';
 import type { EmailData } from '../services/ApiService';
 import { extractVerificationCodeFromEmail } from '../utils/verificationCodeExtractor';
 import VerificationCodeDisplay from './VerificationCodeDisplay';

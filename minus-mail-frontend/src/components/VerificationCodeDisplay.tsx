@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './VerificationCodeDisplay.module.css';
+import styles from '../styles/VerificationCodeDisplay.module.css';
 
 interface VerificationCodeDisplayProps {
   code: string;

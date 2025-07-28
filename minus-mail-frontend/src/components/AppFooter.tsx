@@ -1,4 +1,4 @@
-import styles from './AppFooter.module.css';
+import styles from '../styles/AppFooter.module.css';
 
 interface AppFooterProps {
   // Add any props if needed in the future

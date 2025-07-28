@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from './Modal';
 import Inbox from './Inbox';
 import type { EmailData } from '../services/ApiService';
-import styles from './InboxModal.module.css';
+import styles from '../styles/InboxModal.module.css';
 
 interface InboxModalProps {
   isOpen: boolean;
@@ -41,7 +41,6 @@ const InboxModal: React.FC<InboxModalProps> = ({
           isLoading={isLoading}
           emailData={emailData}
           handleEmailSelect={handleEmailSelectAndClose}
-          isModal={true}
         />
       </div>
     </Modal>
