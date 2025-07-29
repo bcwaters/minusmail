@@ -1,7 +1,8 @@
 .inboxContainer {
   padding: 10px;
   height: 100%;
-  border: 1px solid #FBA43F;
+  border-right: 1px solid #FBA43F;
+  border-left: 1px solid #FBA43F;
   border-radius: 1px;
   background: #fff;
   font-family: 'Georgia, Times New Roman, serif';

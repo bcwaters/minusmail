@@ -212,6 +212,7 @@ body, html, .app-container {
     padding: 0;
     color: #111 !important;
     height: auto; /* Reset height for mobile */
+    border-right: none; /* Hide border on mobile */
   }
   
   .card {
